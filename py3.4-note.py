@@ -82,7 +82,94 @@ for name in L:
 	print('Hello, %s!' %(name))
 ```
 
-##dict字典（dictionary）和set
+##dict字典{}（dictionary）和set
+
+###dict 中如果key不存在，dict就会报错
+###dict的key必须是不可变对象
+
+###set 一组不重复key的集合，但不存储value。
+###要创建一个set，需要提供一个list作为输入集合
+`s = set([1, 2, 3])
+s
+{1, 2, 3}
+`
+
+s.add(key) 添加元素到set
+s.remove(key) 删除元素 
+
+set可以看成数学意义上的无序和无重复元素的集合，因此，两个set可以做数学意义上的交、并集
+
+s1 & s2  #交际
+
+s1 | s2 #并集
+
+#函数
+##调用函数
+##定义函数
+
+函数体内部的语句在执行时，一当执行到`return`时，函数就执行完毕，并将结果返回
+如果没有`return`语句，函数执行完毕后也会返回结果，只是结果为`None`。
+`return None`可以简写为`return`
+
+**?**  `isinstance()`
+**?**  `raise `
+
+
+**练习**
+
+请定义一个函数quadratic(a, b, c)，接收3个参数，返回一元二次方程：
+
+ax^2 + bx + c = 0的两个解。
+
+提示：计算平方根可以调用math.sqrt()函数：
+>>> import math
+>>> math.sqrt(2)
+1.4142135623730951
+
+
+
+# -*- coding: utf-8 -*-
+
+import math
+
+def quadratic(a, b, c):
+	delte = b**2 - 4*a*c
+	if delte < 0:
+		print("此一元二次方程无解。")
+	elif delte == 0:
+		ans = (-b)/(2*a)
+		print("此一元二次方程有唯一解。唯一解为%f。" %ans)
+	else:
+		ans1 = (math.sqrt(delte) - b)/(2*a)
+		ans2 = (-b - math.sqrt(delte))/(2*a)
+		print("此一元二次方程有两个不同解，分别是%f和%f。" %(ans1, ans2))
+# 测试:
+print(quadratic(2, 3, 1))
+print(quadratic(1, 3, -4))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
