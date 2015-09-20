@@ -113,7 +113,7 @@ s1 | s2 #并集
 
 **?**  `isinstance()`
 **?**  `raise `
-
+- 函数可以同时返回return多个值，也就是一个tuple
 
 **练习**
 
@@ -148,9 +148,172 @@ print(quadratic(2, 3, 1))
 print(quadratic(1, 3, -4))
 
 
+##函数的参数
+def power(x, n = 2):
+	s = 1
+	while n > 0:
+		n = n -1
+		s = s * x
+	return s
+
+a = power(2,0)
+b = power(2,45)
+print(a)
+print(b)
+
+###可变参数
+
+def calc(number):
+	sum = 0
+	for n in number:
+		sum = sum + n *n
+	return sum
+
+calc([1,2,3]) #但是调用的时候，需要先组装一个list或 tuple
+calc((1,2,3))
+
+
+def calc(*number):
+	sum = 0
+	for n in number:
+		sum = sum + n *n
+	return sum
+
+- 可变参数
+*args  表示list
+- 关键字参数
+**   dict
+- 命名关键字参数
+* 分隔符
+
+- 参数组合
+def f1(a, b, c=0, *args, **kw):
+	print('a=', a, 'b=', b,'c=', c,'args', args, 'kw', kw )
+
+def f2(a, b, c = 0, *, d, **kw):
+	print('a=', a, 'b=', b, 'c=', c, 'd=', d, 'kw=',kw)
 
 
 
+f1(1, 2)
+
+args = (1,2,3)
+kw = {'d':99, 'x':'#', 'z':56,'fg':345}
+f2(*args, **kw)
+
+**?** dict的顺序
+
+
+##递归函数
+
+def fact(n):
+	if n = 1:
+		return 1
+	return n * fact(n-1)
+
+- 尾递归
+在函数返回的时候，调用自身本身，并且，return语句不能包含表达式。这样，编译器或者解释器就可以把尾递归做优化，使递归本身无论调用多少次，都只占用一个栈帧，不会出现栈溢出的情况。
+
+def fact(n):
+	return fact_iter(n, 1)
+
+def fact_iter(num, product):
+	if num == 1:
+		return product
+	return fact_iter(num- 1, num* product)
+
+- 练习
+
+
+def move(n, a, b, c):
+	if n == 1:
+		print(a "--->" c)
+	else:
+		move(n-1, a, c, b)
+		move(1, a, b, c)
+		move(n - 1, b, a, c)
+
+
+
+move(3, 'A', 'B', 'C')
+
+
+
+#高级特性
+##切片slice
+
+##迭代iteration   for...in
+
+d = {'a' : 1, 'b' : 2, 'c' : 3}
+
+for i in d:
+	print(i, end = ' ')
+
+for i in d.values():
+	print(i)
+
+- 判断可迭代对象
+- 通过collections 模块的Iterable
+
+from collections import Iterable 
+isinstance('abc', Iterable)
+
+##列表生成式 List Comprehensions
+
+L = []
+for x in range(1, 11):
+	L.append(x *x)
+
+print(L)
+
+[x * x for x in range(1, 11)]
+
+
+- 两层循环
+
+[m + n  for m in 'ABC' for n in 'abc']
+
+
+- 三层的很少使用了
+
+- 列出当前目录下的所有文件和目录名
+
+import os
+[d for d in os.listdir('.')]  #os.listdir可以列出文件和目录
+
+
+d = {'x':'A' , 'Y': 'B', 'z': 'C'}
+for k, v in d.items():
+	print(k, ' ', v)
+
+[k +'='+ v for k , v in d.items()]
+
+l = ['Hello', 'World', 'IBN', 'Apple' ]
+
+[a.lower() for a in l]
+
+**练习**
+如果list中既包含字符串，又包含整数，由于非字符串类型没有lower()方法，所以列表生成式会报错：
+
+>>> L = ['Hello', 'World', 18, 'Apple', None]
+>>> [s.lower() for s in L]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 1, in <listcomp>
+AttributeError: 'int' object has no attribute 'lower'
+
+
+
+L = ['Hello', 'World', 18, 'Apple', None]
+
+[s.lower() for s in L if isinstance(s, str)]
+
+
+##生成器
+**生成器 generator**：一边循环一边计算
+
+- 方法一
+把列表生成式的[]改成()
 
 
 
