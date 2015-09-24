@@ -337,22 +337,73 @@ def fib(max):
         n = n + 1
     return 'done'
 
-    
-def triangles(n):
+ 迭代器   
+
+def triangle(n):
+    L=[1]
+    while True:
+        yield(L)
+        L.append(0)
+        L=[L[i]+L[i-1] for i in range(len(L))]
+        if len(L)>n:
+            break/
+    return "done"
+
+g=triangle(15)
+for i in g:
+    print(i)
+
+#函数式编程（Functional Programming）
+纯粹的函数式编程语言编写的函数没有变量，因此，任意一个函数，只要输入是确定的，输出就是确定的，这种纯函数我们称之为没有副作用。而允许使用变量的程序设计语言，由于函数内部的变量状态不确定，同样的输入，可能得到不同的输出，因此，这种函数是有副作用的。
+
+函数式编程的一个特点就是，允许把函数本身作为参数传入另一个函数，还允许返回一个函数！
+
+Python对函数式编程提供部分支持。由于Python允许使用变量，因此，Python不是纯函数式编程语言。
+
+##高阶函数Higher-order function
+###map/reduce
+
+def add100(x):
+	return x+100
+
+hh = [11, 22, 33]
+
+l = map(add100, hh)
+list(l)
+#输出[111, 122, 133]
+
+2. 如果给出额外的可迭代参数，则对每个可迭代参数中的元素‘并行’
+
+def abc(a, b, c):
+	return a *10000 + b *100 + c
+
+list1 = [11, 22, 33]
+list2 = [44, 55, 66]
+list3 = [77, 88, 99]
+
+list(map(abc, list1, list2, list3))
+
+#输出[114477, 225588, 336699]
+
+
+reduce: 把一个函数作用在一个序列[x1, x2, x3......]上,这个函数必须接收2个参数
+reduce(f, [x1,  x2, x3]) = f(f(f(x1, x2),x3),x4)
+
+from functools import reduce
+def add(x, y):
+	return x+y
+
+reduce(add, [1, 3,4,5,7])
+
+from functools import reduce
+def fn(x, y):
+	return x*10 +y
+
+def char2num(s):
+	return{}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+def normalize(name):
 
 
