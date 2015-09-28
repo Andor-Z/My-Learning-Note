@@ -183,7 +183,65 @@ input1.close()
 
 ex18
 
-p58
+def print_two(*args):
+	arg1, arg2 = args
+	print('arg1: %r, arg2: %r' % (arg1, arg2))
+
+print_two('zhao', 'yu')
+print_two('zhao', 'yu','fei')
+
+
+ex19
+
+
+from sys import argv
+
+script, input_file = argv
+
+def print_all(f):
+	print f.read()
+
+def rewind(f):
+	f.seek(0)
+
+def print_a_line(line_count, f):
+	for i in range(1,line_count+1):
+		print(i, f.readline())
+
+current_file = open(input_file)
+
+print('First let\'s print the whole file:\n')
+
+print_all(current_file)
+
+print('Now let\'s rewind, kind of like a tape')
+
+rewind(current_file)
+
+print('Let\'s print three lines:')
+
+current_line = 3
+print_a_line(current_line, current_file)
+
+
+ex21
+
+def add(a, b):
+	print('ADDING %d + %d' %(a, b))
+	return a + b
+
+def subtract(a, b):
+	print('SUBTRACTING %d + %d' %(a, b))
+	return a - b
+
+print("Let's do some math with just functions!")
+
+age = add(30, 5)
+height = subtract(78, 4)
+
+
+
+
 
 
 
