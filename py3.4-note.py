@@ -316,6 +316,7 @@ L = ['Hello', 'World', 18, 'Apple', None]
 把列表生成式的[]改成()
 
 
+###7.1.2 map/reduce
 
 
 
