@@ -320,11 +320,11 @@ L
 g = (x*x for x in range(10))
 g
 
-<<<<<<< HEAD
-###7.1.2 map/reduce
-=======
+
+
+
 通过使用next()函数获得generator的下一个返回值
->>>>>>> origin/master
+
 
 
 next(g)
@@ -411,3 +411,4 @@ def char2num(s):
 def normalize(name):
 
 
+###7.1.2 map/reduce
