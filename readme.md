@@ -10,7 +10,7 @@
 
 ##参考资料  
 [廖雪峰的Python教材](http://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000)  
-[Python官网教材-v3.4.3中文教材](http://python.usyiyi.cn/python_341/tutorial/index.html) 
+[Python官网教材-v3.4.3中文教材](http://python.usyiyi.cn/python_341/tutorial/index.html)   
 [《learn Python the hard way》](http://learnpythonthehardway.org/book/)  
 《利用Python进行数据分析》
   
