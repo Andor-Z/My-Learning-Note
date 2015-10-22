@@ -1,0 +1,285 @@
+#main DIV.attachmentsContainer {
+	BACKGROUND: none transparent scroll repeat 0% 0%; CLEAR: both; MARGIN: 0px 0px 0.5em
+}
+DIV.attachmentsContainer {
+	BACKGROUND: none transparent scroll repeat 0% 0%; CLEAR: both; MARGIN: 0px 0px 0.5em
+}
+#main DIV.attachmentsList TABLE {
+	BORDER-TOP-STYLE: none; MARGIN-BOTTOM: 4px; FONT-SIZE: 90%; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-STYLE: none; FONT-WEIGHT: bold; BORDER-RIGHT-STYLE: none; CLEAR: both; BORDER-LEFT-STYLE: none; LINE-HEIGHT: 160%
+}
+DIV.attachmentsList TABLE {
+	BORDER-TOP-STYLE: none; MARGIN-BOTTOM: 4px; FONT-SIZE: 90%; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-STYLE: none; FONT-WEIGHT: bold; BORDER-RIGHT-STYLE: none; CLEAR: both; BORDER-LEFT-STYLE: none; LINE-HEIGHT: 160%
+}
+#main DIV.attachmentsList CAPTION {
+	FONT-SIZE: 110%; FONT-WEIGHT: bold; TEXT-ALIGN: left; MARGIN-TOP: 4px
+}
+DIV.attachmentsList CAPTION {
+	FONT-SIZE: 110%; FONT-WEIGHT: bold; TEXT-ALIGN: left; MARGIN-TOP: 4px
+}
+#main DIV.attachmentsList THEAD TR {
+	BACKGROUND-COLOR: #dadada
+}
+DIV.attachmentsList THEAD TR {
+	BACKGROUND-COLOR: #dadada
+}
+#main DIV.attachmentsList TBODY {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV.attachmentsList TBODY {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+#main DIV.attachmentsList TBODY TR {
+	FONT-SIZE: 1.2em; BACKGROUND: none transparent scroll repeat 0% 0%; FONT-WEIGHT: normal
+}
+DIV.attachmentsList TBODY TR {
+	FONT-SIZE: 1.2em; BACKGROUND: none transparent scroll repeat 0% 0%; FONT-WEIGHT: normal
+}
+#main DIV.attachmentsList TBODY TR A {
+	FONT-WEIGHT: normal; COLOR: #4384c4
+}
+DIV.attachmentsList TBODY TR A {
+	FONT-WEIGHT: normal; COLOR: #4384c4
+}
+#main DIV.attachmentsList TBODY TR A:hover {
+	TEXT-DECORATION: none; COLOR: #940606
+}
+DIV.attachmentsList TBODY TR A:hover {
+	TEXT-DECORATION: none; COLOR: #940606
+}
+#main DIV.attachmentsList TBODY TR A:focus {
+	TEXT-DECORATION: none; COLOR: #940606
+}
+DIV.attachmentsList TBODY TR A:focus {
+	TEXT-DECORATION: none; COLOR: #940606
+}
+#main DIV.attachmentsList TBODY TR.odd {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+#main DIV.attachmentsList TABLE TBODY TR.odd TD {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV.attachmentsList TBODY TR.odd {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV.attachmentsList TABLE TBODY TR.odd TD {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+#main DIV.attachmentsList TBODY TR.even {
+	BACKGROUND-COLOR: #f5f5f5
+}
+#main DIV.attachmentsList TBODY TR.even TD {
+	BACKGROUND-COLOR: #f5f5f5
+}
+DIV.attachmentsList TBODY TR.even TD {
+	BACKGROUND-COLOR: #f5f5f5
+}
+DIV.attachmentsList TBODY TR.even {
+	BACKGROUND-COLOR: #f5f5f5
+}
+#main DIV.attachmentsList TR.unpublished {
+	BACKGROUND-COLOR: #aaa
+}
+#main DIV.attachmentsList TR.unpublished TD {
+	BACKGROUND-COLOR: #aaa
+}
+DIV.attachmentsList TR.unpublished {
+	BACKGROUND-COLOR: #aaa
+}
+DIV.attachmentsList TR.unpublished TD {
+	BACKGROUND-COLOR: #aaa
+}
+#main DIV.attachmentsList TABLE THEAD TH {
+	BORDER-TOP: #d0d0d0 1px solid; BORDER-RIGHT: #d0d0d0 1px solid; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM: #d0d0d0 1px solid; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 3px; BORDER-LEFT: #d0d0d0 1px solid; PADDING-RIGHT: 3px
+}
+DIV.attachmentsList TABLE THEAD TH {
+	BORDER-TOP: #d0d0d0 1px solid; BORDER-RIGHT: #d0d0d0 1px solid; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM: #d0d0d0 1px solid; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 3px; BORDER-LEFT: #d0d0d0 1px solid; PADDING-RIGHT: 3px
+}
+#main DIV.attachmentsList TABLE TBODY TD {
+	BACKGROUND: none transparent scroll repeat 0% 0%; PADDING-BOTTOM: 1px; PADDING-TOP: 1px; PADDING-LEFT: 3px; PADDING-RIGHT: 3px
+}
+DIV.attachmentsList TABLE TBODY TD {
+	BACKGROUND: none transparent scroll repeat 0% 0%; PADDING-BOTTOM: 1px; PADDING-TOP: 1px; PADDING-LEFT: 3px; PADDING-RIGHT: 3px
+}
+#main DIV.attachmentsList TABLE TBODY TR.even TD {
+	BACKGROUND-COLOR: #eee
+}
+DIV.attachmentsList TABLE TBODY TR.even TD {
+	BACKGROUND-COLOR: #eee
+}
+#main DIV.attachmentsList TABLE TBODY TR.unpublished TD {
+	COLOR: #333; BACKGROUND-COLOR: #aaa
+}
+DIV.attachmentsList TABLE TBODY TR.unpublished TD {
+	COLOR: #333; BACKGROUND-COLOR: #aaa
+}
+#main DIV.attachmentsList TABLE A {
+	FONT-WEIGHT: bold
+}
+DIV.attachmentsList TABLE A {
+	FONT-WEIGHT: bold
+}
+#main DIV.attachmentsList TABLE IMG {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: text-bottom; BORDER-BOTTOM-WIDTH: 0px; MARGIN: 0px; BORDER-TOP-WIDTH: 0px
+}
+DIV.attachmentsList TABLE IMG {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: text-bottom; BORDER-BOTTOM-WIDTH: 0px; MARGIN: 0px; BORDER-TOP-WIDTH: 0px
+}
+#main DIV.attachmentsList TABLE A.modal-button {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px; BORDER-TOP-WIDTH: 0px
+}
+DIV.attachmentsList TABLE A.modal-button {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px; BORDER-TOP-WIDTH: 0px
+}
+DIV.attachmentsList TABLE TD.at_edit A.modal-button {
+	FLOAT: none; DISPLAY: inline
+}
+DIV.attachmentsList TABLE TD.at_edit A.modal-button IMG {
+	FLOAT: none; DISPLAY: inline
+}
+#main DIV.attachmentsList IMG.link_overlay {
+	MARGIN-LEFT: -16px
+}
+DIV.attachmentsList IMG.link_overlay {
+	MARGIN-LEFT: -16px
+}
+#main DIV.attachmentsList A.at_icon {
+	PADDING-RIGHT: 4px
+}
+DIV.attachmentsList A.at_icon {
+	PADDING-RIGHT: 4px
+}
+DIV.attachmentsList A.at_icon:link {
+	TEXT-DECORATION: none
+}
+DIV.attachmentsList A.at_icon:visited {
+	TEXT-DECORATION: none
+}
+DIV.attachmentsList A.at_icon:hover {
+	TEXT-DECORATION: none; BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #f00
+}
+DIV.attachmentsList A.at_icon:active {
+	TEXT-DECORATION: none
+}
+DIV.attachmentsList A.at_url {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV.attachmentsList A.at_url:link {
+	TEXT-DECORATION: none
+}
+DIV.attachmentsList A.at_url:visited {
+	TEXT-DECORATION: none
+}
+DIV.attachmentsList A.at_url:hover {
+	TEXT-DECORATION: none; BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV.attachmentsList A.at_url:active {
+	TEXT-DECORATION: none
+}
+DIV.attachmentsList TH.at_filename {
+	TEXT-ALIGN: left
+}
+DIV.attachmentsList TD.at_filename {
+	TEXT-ALIGN: left
+}
+DIV.attachmentsList TD.at_file_size {
+	FONT-SIZE: 0.9em; TEXT-ALIGN: right
+}
+DIV.attachmentsList TH.at_downloads {
+	TEXT-ALIGN: center
+}
+DIV.attachmentsList TD.at_downloads {
+	TEXT-ALIGN: center
+}
+DIV.attachmentsList TH.at_edit {
+	TEXT-ALIGN: center
+}
+DIV.attachmentsList TD.at_edit {
+	BACKGROUND: none transparent scroll repeat 0% 0%; TEXT-ALIGN: center
+}
+#main DIV.addattach {
+	BACKGROUND: none transparent scroll repeat 0% 0%; MARGIN-TOP: 4px
+}
+DIV.addattach {
+	BACKGROUND: none transparent scroll repeat 0% 0%; MARGIN-TOP: 4px
+}
+DIV.addattach IMG {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px
+}
+DIV.addattach A IMG {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px
+}
+DIV.addattach A {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px; BORDER-TOP-WIDTH: 0px
+}
+DIV.addattach A:hover {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px; COLOR: #f00; BORDER-TOP-WIDTH: 0px
+}
+DIV.addattach A IMG {
+	VERTICAL-ALIGN: text-bottom
+}
+DIV.addattach A.at_icon {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px; BORDER-TOP-WIDTH: 0px
+}
+DIV.addattach A.at_icon:link {
+	TEXT-DECORATION: none
+}
+DIV.addattach A.at_icon:visited {
+	TEXT-DECORATION: none
+}
+DIV.addattach A.at_icon:hover {
+	TEXT-DECORATION: none; BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV.addattach A.at_icon:active {
+	TEXT-DECORATION: none
+}
+DIV.addattach A {
+	BORDER-LEFT-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px; BORDER-TOP-WIDTH: 0px
+}
+DIV.addattach A:link {
+	TEXT-DECORATION: none; COLOR: red
+}
+DIV.addattach A:visited {
+	TEXT-DECORATION: none; COLOR: red
+}
+DIV.addattach A:hover {
+	TEXT-DECORATION: underline; BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #f00
+}
+DIV.addattach A:active {
+	TEXT-DECORATION: none; COLOR: red
+}
+DIV.addattach A.modal-button {
+	BORDER-LEFT-WIDTH: 0px !important; BORDER-RIGHT-WIDTH: 0px !important; BACKGROUND: none transparent scroll repeat 0% 0%; BORDER-BOTTOM-WIDTH: 0px !important; PADDING-BOTTOM: 2px !important; PADDING-TOP: 2px !important; PADDING-LEFT: 2px !important; PADDING-RIGHT: 2px !important; BORDER-TOP-WIDTH: 0px !important
+}
+DIV.addattach A.modal-button:link {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV.addattach A.modal-button:visited {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV.addattach A.modal-button:hover {
+	BACKGROUND: none transparent scroll repeat 0% 0%; COLOR: #f00
+}
+DIV.addattach A.modal-button:active {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+DIV#main DIV.requestLogin H1 {
+	FONT-SIZE: 150%; COLOR: #135cae; LINE-HEIGHT: 150%
+}
+DIV#main DIV.requestLogin H2 {
+	FONT-SIZE: 100%; PADDING-BOTTOM: 0px; PADDING-TOP: 4px; PADDING-LEFT: 20px; MARGIN: 0px; LINE-HEIGHT: 100%; PADDING-RIGHT: 0px
+}
+DIV#main DIV.requestLogin H2 A {
+	FONT-SIZE: 100%; FONT-WEIGHT: bold
+}
+DIV.uploadAttachmentsPage DIV.warning {
+	MARGIN-LEFT: 20px; MARGIN-TOP: 10px
+}
+DIV.uploadAttachmentsPage DIV.warning H1 {
+	FONT-SIZE: 200%; FONT-WEIGHT: bold; COLOR: red; TEXT-ALIGN: center; LINE-HEIGHT: normal
+}
+DIV.uploadAttachmentsPage DIV.warning H2 {
+	FONT-SIZE: 150%; FONT-WEIGHT: bold; LINE-HEIGHT: normal
+}
+FORM.attachmentsBackend + DIV.attachmentsList TABLE {
+	BACKGROUND-COLOR: #fff
+}
