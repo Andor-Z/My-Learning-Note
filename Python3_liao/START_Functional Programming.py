@@ -59,6 +59,81 @@ python中通过前缀`_`实现作用域
 ##8.2 安装第三方模块
 
 
+#9 面向对象编程
+
+`object oriented programming `
+
+##9.1 类和实例
+
+类 class 实例的模板，
+实例 instance  一个个具体的对象
+方法 就是与实例绑定的函数，方法可以直接访问实例的数据
+
+```
+class Student(object): #类名称开头字母通常大写
+
+	def __init__(self, name, score): # __init__ 方法的第一个参数永远是self,表示实例本身
+	# name, score 都是 类的属性
+		self.name = name
+		self.score = score
+
+	def print_score(self):
+		print('%s:%s' %(self.name, self.score))
+
+
+bart = Student('Bart Simpson', 59)
+
+bart.print_score()
+```
+
+##9.2 访问限制
+
+如果要让内部属性不被外部访问，可以把属性的名称前加两个下划线__,变成私有变量private，只有内部可以访问，外部不能访问
+
+```
+class student(object):
+
+	def __init__(self, name, score):
+		self.__name = name
+		self.__score = score
+
+	def print_score(self):
+		print('%s:%s' %(self.__name, self.__score))
+```
+
+如果外部代码需要获取name score 属性，需要给Student类增加 方法
+
+##9.3 继承和多态
+
+##9.4 获取对象信息
+
+type()
+
+isinstance()
+
+dir()
+
+```
+hasattr(obj, 'x') # 有属性'x'吗？
+
+hasattr(obj, 'y') # 有属性'y'吗？
+
+setattr(obj, 'y', 19) # 设置一个属性'y'
+
+getattr(obj, 'y') # 获取属性'y'
+
+```
+
+
+##9.5 实例属性与类属性
+
+
+#10 面向对象高级编程
+
+多重继承  定制类 元类
+
+##10.1 使用__slots__
+
 
 
 
