@@ -134,6 +134,130 @@ getattr(obj, 'y') # 获取属性'y'
 
 ##10.1 使用__slots__
 
+限制实例的属性
+···
+class Student():
+	__slots__ = ('name', 'age')
+```
+对继承的子类并不起作用
+
+##10.2 使用 @property
+
+python 内置装饰器 @property  
+
+```
+class Screen(object):
+	def __init__(self, width, height):
+		self._width = width
+		self._height = height 
+
+
+	#__slots__ = ('width', 'height', 'resolution') 由于有变量冲突不可以用，不知道为啥
+
+
+	@property
+	def width(self):
+	    return self._width
+
+	@width.setter
+	def width(self, value):
+		if not isinstance(value, int):
+			raise ValueError('width must be an integer.')
+		self._width = value
+
+	@property
+	def height(self):
+	    return self._height
+
+	@height.setter
+	def height(self, value):
+		if not isinstance(value, int):
+			raise ValueError('height must be an integer.')
+		self._height = value
+	
+	@property
+	def resolution(self):
+	    return self._height *self._width
+	
+
+
+s = Screen(1024,768)
+#s.width = 1024
+#s.height = 768
+print(s.resolution)
+assert s.resolution == 786432, '1024 * 768 = %d ?' % s.resolution
+```
+
+##10.3 多重继承
+
+MixIn
+
+##10.4 定制类
+
+- `__str__`
+
+- `__iter__` `__next__`
+
+- `__getitem__`
+
+- `__getattr__`
+
+- `__call__`
+
+不懂的地方好多！！！！
+
+
+
+##10.5 使用枚举类
+
+
+##10.6 使用元类
+
+
+
+
+#11 错误、调试和测试
+
+##11.1 错误处理
+```
+try:
+
+except       as e:
+
+
+finally:
+
+```
+
+- 调用堆栈
+
+这一章很蛋疼
+
+#12 IO编程
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
