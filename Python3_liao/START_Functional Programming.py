@@ -235,6 +235,41 @@ finally:
 
 #12 IO编程
 
+stream 流
+同步IO
+
+异步IO
+	回调模式
+	轮询模式
+	
+##12.1 文件读写
+
+```
+try:
+	f = open(r'D:\GitHub\Python-note\test.txt')
+	a = f.read()
+	print(a)
+finally:
+	f.close()
+```
+```
+with open(r'D:\GitHub\Python-note\test.txt', 'r') as f:
+	print(f.read())
+```
+
+read(size)方法
+
+readline()
+readlines()  一次读取所有内容并按行返回list
+
+
+ 字符编码
+open(r"", encoding = 'gbk')
+
+当遇到有些编码不规范的的文件，你可能会遇到`UnicodeDecodeError`,因为在文本文件中可能夹杂了一些非法编码的字符。解决办法是
+f = open(r'', encoding = 'gbk', errors = 'ignore')
+
+写文本文件 `'w'`  写二进制文件`'wb'`
 
 
 
