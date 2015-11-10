@@ -1,3 +1,5 @@
-f = open(r'D:\GitHub\Python-note\test.txt')
-a = f.read()
-print(a)
+
+from io import StringIO
+f = StringIO()
+f.write(u'hello')
+

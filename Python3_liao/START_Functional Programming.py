@@ -271,13 +271,98 @@ f = open(r'', encoding = 'gbk', errors = 'ignore')
 
 写文本文件 `'w'`  写二进制文件`'wb'`
 
+##12.2 StringIO BytesIO
+
+StringIO
+```
+from io import StringIO
+f = StringIO()
+print(f.write(u'hello'))
+print(f.getvalue())
+```
+
+BytesIO
+
+```
+from io import BytesIO
+f = BytesIO()
+f.write('中文',encode('utf-8'))  #这段代码运行有问题
+```
+
+这节不懂。。。。。
+
+
+##12.3 操作文件和目录
+
+```
+import os
+print(os.name)
+#如果是posix，说明系统是Linux、Unix或Mac OS X，如果是nt，就是Windows系统
+#print(os.uname())
+#uname()函数在Windows上不提供
+os.environ
+
+#获取某个环境变量的值
+os.environ.get('PATH')
+
+```
+import os
+# 查看当前目录的绝对路径:
+print(os.path.abspath('.'))
+
+# 在某个目录下创建一个新目录，首先把新目录的完整路径表示出来:
+os.path.join('/Users/michael', 'testdir')
+
+# 然后创建一个目录:
+os.mkdir('/Users/michael/testdir')
+# 删掉一个目录:
+os.rmdir('/Users/michael/testdir')
+#路径拆分
+os.path.split()
+>>> os.path.split('/Users/michael/testdir/file.txt')
+('/Users/michael/testdir', 'file.txt')
+#路径合并
+os.path.join()
+#文件扩展名
+>>> os.path.splitext('/path/to/file.txt')
+('/path/to/file', '.txt')
+
+# 对文件重命名:
+>>> os.rename('test.txt', 'test.py')
+# 删掉文件:
+>>> os.remove('test.py')
+
+
+#shutil模块  os模块的补充
+```
+
+#当前目录下所有目录
+import os
+[x for x in os.listdir('.') if os.path.isdir(x)]
+
+os.listdir 当前目录下所有内容
+os.path.isdir 某一路径是否为目录
+
+
+#列出所有的.py文件
+[x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1] == '.py']
+
+- Python的os模块封装了操作系统的目录和文件操作，要注意这些函数有的在os模块中，有的在os.path模块中。
+
+
+##12.4 序列化
+
+把变量从内存中变成可存储或传输的过程称之为序列化，在Python中叫pickling，在其他语言中也被称之为serialization，marshalling，flattening等等
+
+
+#13 进程和线程
 
 
 
+#14 正则表达式
 
-
-
-
+'\d' 匹配一个数字
+'\w' 匹配
 
 
 
