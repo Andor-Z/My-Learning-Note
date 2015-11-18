@@ -36,13 +36,24 @@ def about():
 #结尾不带斜线，类似 UNIX-like 系统下的文件的路径名。访问结尾带斜线的 URL 会产生一个 404 “Not Found” 错误。
 
 #构建URL   使用url for()针对一个特定的函数构建一个URL。它能接受函数名作为第一参数，以及一些关键字参数，每一个关键字参数对应于URL规则的变量部分。
-with app.test_request_context():
-	print(url_for('index'))
-	print(url_for('show_user_profile',username='Zhao'))
-	print(url_for('about'))
-	print(url_for('about', next = '/'))
-	print(url_for('projects'))
-	print(url_for('projects', next = '/'))
+#with app.test_request_context():
+	#print(url_for('index'))
+	#print(url_for('show_user_profile',username='Zhao'))
+	#print(url_for('about'))
+	#print(url_for('about', next = '/'))
+	#print(url_for('projects'))
+	#print(url_for('projects', next = '/'))
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+	if request.method == 'POST':
+		do_the_login()
+	else:
+		show_the_login_form()
+#出现NameError: name 'request' is not defined，原因不知
+
+#静态文件  只要在你的包中或模块旁边创建一个名为 static 的文件夹，在应用中使用 /static 即可访问。
+#url_for('static', filename = 'style.css')
 
 if __name__ == '__main__':
 	app.run(debug = True)
