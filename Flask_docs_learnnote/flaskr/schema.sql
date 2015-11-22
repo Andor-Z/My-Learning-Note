@@ -1,6 +1,6 @@
 drop table if exists entries;
-creattable entries(
-	id     integer primary key autoincrement,
-	title  string NOT NULL,
-	text string NOT NULL
-	);
+create table entries (
+  id integer primary key autoincrement,
+  title text not null,
+  'text' text not null
+);
