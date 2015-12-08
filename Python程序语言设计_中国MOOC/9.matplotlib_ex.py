@@ -92,4 +92,4 @@ def ex7():
 
 
 #ex1()
-ex6()
+fig = plt.figure()
