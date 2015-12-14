@@ -79,7 +79,27 @@ def sim_pearson(prefs, p1, p2):
 #sim_pearson(critics, 'Lisa Rose', 'Gene Seymour')
 
 
-def topMatches(prefs, person, n = 5, similarity)
+def topMatches(prefs, person, n = 5, similarity = sim_pearson):
+	'''
+	Return the best mathces for person from the prefs dictionary.
+	从反映偏好的字典中返回最为匹配者。
+	Number of results and similarity function are optional params.
+	返回结果的个数和相似度函数均为可选参数。
+	'''
+	scores = [(similarity(prefs, person, other),other) for other in prefs if other !=person]
+
+	scores.sort()
+	scores.reverse()
+	return scores[0:n]
+
+
+#topMatches(critics, 'Lisa Rose')
+
+
+# 推荐物品 Recommending Items
+
+
+
 
 
 
