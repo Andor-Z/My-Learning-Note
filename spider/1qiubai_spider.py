@@ -1,6 +1,7 @@
 import urllib
 import urllib.request
 import re
+import time
 
 
 
@@ -51,6 +52,28 @@ def spider_qb_3():
 	try:
 		request = urllib.request.Request(url, headers = header )
 		response = urllib.request.urlopen(request)
+
+		content = response.read().decode('utf-8')
+
+		pattern = re.compile('"author clearfix".*?<h2>(.*?)</h2>.*?"content">(.*?)<!--(.*?)-->.*?</div>(.*?)<div class="stats.*?number">(.*?)</i>',re.S)
+
+		items = re.findall(pattern, content)
+		print(items)
+		for item in items:
+
+			haveImg = re.search('img', item[3])
+			
+			if haveImg == None:
+				for i in range(len(item)):
+
+					if i == 2:
+						print(time.strftime('%Y-%m-%d %H:%M',time.localtime(int(item[i]))))
+					else:
+						print(item[i])
+
+					
+
+
 		#print(response.read())
 	except urllib.error.URLError as e:
 		#3中URLError归到urllib.error中了
@@ -59,7 +82,7 @@ def spider_qb_3():
 		if hasattr(e, 'reason'):
 			print(e.reason)
 
-	content = response.read().decode('utf-8')
+	
 	#print(content)
 
 	# 这个正则表达式中，取了组，分别代表 发布人、发布时间、发布内容、附加图片、 点赞数
@@ -75,19 +98,17 @@ def spider_qb_3():
 	# 取 作者 正文 时间 图片链接 ，但是当原文没有其中任何一样时，这段糗百就取不到
 	pattern3 = re.compile('"author clearfix".*?<h2>(.*?)</h2>.*?"content">(.*?)<!--(.*?)-->.*?"thumb".*?src=(.*?) alt=.*?"number">(.*?)</i>',re.S)
 	# 取 作者 正文 时间 图片链接 ，但是当原文没有其中任何一样时，这段糗百就取不到
-	pattern = re.compile('"author clearfix".*?<h2>(.*?)</h2>.*?"content">(.*?)<!--(.*?)-->.*?number">(.*?)</i>',re.S)
+	
 
 
 	
-	items = re.findall(pattern, content)
-	#print(items)
-	for item in items:
-		for i in range(len(items2[0])):
-			print(item[i])
+	
+	
+	
 		
+spider_qb_3()
 
-
-
+#pattern = re.compile('"author clearfix".*?<h2>(.*?)</h2>.*?"content">(.*?)<!--(.*?)-->.*?number">(.*?)</i>',re.S)
 
 
 
