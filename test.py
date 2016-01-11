@@ -1,6 +1,13 @@
+import mysql.connector
 
-import time
-print(time.time())
+config = {
+  'user': 'scott',
+  'password': 'tiger',
+  'host': '127.0.0.1',
+  'database': 'employees',
+  
+}
 
-#print(time.localtime(1450129680))
-print(time.strftime('%Y-%m-%d %H:%M',time.localtime(1450129680)))
+cnx = mysql.connector.connect(**config)
+
+cnx.close()
