@@ -158,4 +158,7 @@ class TBMM:
 
 sPath = 'd:\mm'
 tbmm = TBMM(sPath)
-tbmm.savePagesInfo(2,3)
+tbmm.savePagesInfo(4,8)
+
+
+#tbmm.getDetailPage('//mm.taobao.com/25115086.htm')
