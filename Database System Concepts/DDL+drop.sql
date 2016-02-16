@@ -30,7 +30,7 @@ create table course
 	 dept_name		varchar(20),
 	 credits		numeric(2,0) check (credits > 0),
 	 primary key (course_id),
-	 foreign key (dept_name) references department
+	 foreign key (dept_name) references department(dept_name)
 		on delete set null
 	);
 

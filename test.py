@@ -1,13 +1,11 @@
-import mysql.connector
+def log(func):
+    def wrapper(*args, **kw):
+        print('call %s():' % func.__name__)
+        return func(*args, **kw)
+    return wrapper
 
-config = {
-  'user': 'scott',
-  'password': 'tiger',
-  'host': '127.0.0.1',
-  'database': 'employees',
-  
-}
+@log
+def now():
+    print('2015-3-25')
 
-cnx = mysql.connector.connect(**config)
-
-cnx.close()
+now()
