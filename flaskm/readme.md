@@ -1,5 +1,7 @@
 ##4个顶级文件夹：
 * app:Flask程序
+    - app/models.py 数据库模型
+    - app/email.py 电子邮件支持函数
 * migrations: 数据库迁移脚本
 * tests: 单元测试编写
 * venv

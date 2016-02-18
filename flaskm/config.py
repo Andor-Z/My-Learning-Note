@@ -22,4 +22,19 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS = True  # 启用传输层安全（ Transport Layer Security， TLS）协议
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.jion(basedir,'data-dev.sqlite')
+
+class TestConfig(Config):
+    TESTING = True 
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or 'sqlite:///' + os.path.jion(basedir, 'data-test.sqlite')
+
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.jion(basedir, 'test.sqlite')
+
+
+config = {
+    'development': DevelopmentConfig,
+    'testing': TestConfig,
+    'production':ProductionConfig,
+    'default':DevelopmentConfig
+}
