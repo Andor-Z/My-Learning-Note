@@ -40,3 +40,11 @@
 [《learn Python the hard way》](http://learnpythonthehardway.org/book/)  
 《利用Python进行数据分析》
   
+###Flask 学习资料  
+* 《Flask Web Development》  
+* [Flask 0.10.1 Documentation(中文)](http://www.pythondoc.com/flask/index.html)  
+* [Jinja2 2.7Documentation(中文)](http://docs.jinkan.org/docs/jinja2/)  
+* [Flask官网](http://flask.pocoo.org/)  
+* [documentation for the development version of Jinja2](http://jinja.pocoo.org/docs/dev/)  
+* [从0到1 日拱一卒](http://blog.csdn.net/leadpython?viewmode=contents)  
+* [Flask 源码阅读笔记](http://blog.csdn.net/yueguanghaidao/article/details/40016235)

@@ -11,7 +11,7 @@ handler = ur.HTTPCookieProcessor(cookie)
 # 通过handler构建opener
 opener = ur.build_opener(handler)
 
-response = opener.open('http://www.baidu.com')
+response = opener.open('http://mm.taobao.com/25115086.htm')
 
 for item in cookie:
     print('name = '+item.name)
