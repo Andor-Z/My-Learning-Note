@@ -16,6 +16,42 @@
 
 ### 细小知识点
 
+* 设置环境变量：
+
+Mac Linux ：
+`$ export MAIL_USERNAME = <flaskm@example.com>`
+
+
+Windows :
+`(venv) > set MAIL_USERNAME = <flaskm@example.com>`
+
+
+* 获取环境变量：
+```
+import os
+os.environ.get('MAIL_USERNAME')
+```
+
+* 导出依赖包及其版本  
+`(venv) > pip freeze >requirements.txt`  
+
+* 安装依赖包
+`(venv) > pip intall -r requirements.txt`
+
+
+### 疑难杂症
+
+* Python 虚拟环境下 使用pip 安装新包 出现`Fatal error in launcher: Unable to create process using`
+    解决办法：
+            Windows环境下使用：
+        python -m pip install xxx来替换 install xxx；
+
+
+
+
+
+
+
 * [python中 from . import ×××的那个点](https://www.zhihu.com/question/28688151)
 
-[4、视图函数中的表单操作](https://segmentfault.com/a/1190000002172627)
+* [4、视图函数中的表单操作](https://segmentfault.com/a/1190000002172627)
