@@ -17,7 +17,7 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
-    # ?不理解为何这些扩展函数会有init_app()方法
+    #? 不理解为何这些扩展函数会有init_app()方法
     bootstrap.init_app(app)
     mail.init_app(app)
     moment.init_app(app)
