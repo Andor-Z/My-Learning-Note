@@ -3,6 +3,7 @@
 # all the imports
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask.ext.bootstrap import Bootstrap
 from contextlib import closing  
 #添加一个函数来对初始化数据库
 
@@ -21,6 +22,7 @@ app.config.from_object(__name__)
 
 #app.config.from_envvar('FLASKR_SETTINGS', silent = True) #YOURAPPLICATION_SETTINGS
 
+bootstrap = Bootstrap(app)
 
 def connect_db():
 	return sqlite3.connect(app.config['DATABASE'])
@@ -41,7 +43,7 @@ def before_request():
 
 #装饰器下 的函数在响应对象构建后被调用。它们不允许修改请求，并且它们的返回值被忽略。如果 请求过程中出错，那么这个错误会传递给每个函数；否则传递 None 。
 @app.teardown_request
-def teardown_request(exception):
+def teardown_request(exception):                       #? 
 	db = getattr(g, 'db', None)
 	if db is not None:
 		db.close()
@@ -65,6 +67,28 @@ def add_entry():
 	g.db.commit()
 	flash('New entry was succeddfully posted')
 	return redirect(url_for('show_entries'))
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+	error = None 
+	if request.method == 'POST':
+		if request.form['usename'] != app.config['USERNAME']:
+			error = 'Invalid username/无效的用户名。'
+		elif request.form['password'] != app.config['PASSWORD']:
+			error = 'Invalid password/无效的密码。'
+		else:
+			session['logged_in'] = True                                    #? session
+			flash('You were logged_in.')                                   #? flash
+			return redirect(url_for('show_entries'))       #redirect 重新定向
+	return render_template('login.html', error = error)                    #? 为何要有error 这个参数
+
+
+@app.route('/logout')
+def logout():
+	session.pop('logged_in', None)
+	flash('You were logged out')
+	return redirect(url_for('show_entries'))
+
 
 
 
