@@ -5,6 +5,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from contextlib import closing  
 #添加一个函数来对初始化数据库
+
 # configuration
 DATABASE = 'flaskr.db'
 DEBUG = True
@@ -13,10 +14,13 @@ SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
 
-# creat our little application  :)
+# creat our little application  
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config.from_envvar('FLASKR_SETTINGS', silent = True) #YOURAPPLICATION_SETTINGS
+# from_object() 将会寻找给定的对象(如果它是一个字符串，则会导入它)， 搜寻给定对象里的全部大写的变量。在我们的这种情况中，配置文件就是我们上面写的几行代码。 你也可以将他们分别存储到多个文件。
+
+#app.config.from_envvar('FLASKR_SETTINGS', silent = True) #YOURAPPLICATION_SETTINGS
+
 
 def connect_db():
 	return sqlite3.connect(app.config['DATABASE'])
@@ -53,7 +57,7 @@ def show_entries():
 	return render_template('show_entries.html', entries = entries)
 
 #添加一个新条目
-@app.route('/add', menthods = ['POST'])
+@app.route('/add', methods = ['POST'])
 def add_entry():
 	if not session.get('logged_in'):
 		abort(401)
