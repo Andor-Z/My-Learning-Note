@@ -4,9 +4,10 @@
 
 {% block head %}
 {{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='icon.jpg') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static',filename = 'favicon.ico')}}" type="img/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 {% endblock %}
+
 
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
@@ -29,13 +30,25 @@
 </div>
 {% endblock %}
 
+
+
 {% block content %}
 <div class="container">
-    {% block page_content %}{% endblock %}
+    {% for message in get_flashed_messages()  %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss ="alert">&times;</button>
+            {{message}}
+        </div>
+    {% endfor %}
+    <div class="page-header">
+        {% block page_content %}
+            
+        {% endblock page_content %}
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
-{% endblock %}
+{% endblock scripts %}
