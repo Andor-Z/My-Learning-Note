@@ -72,15 +72,16 @@ def add_entry():
 def login():
 	error = None 
 	if request.method == 'POST':
-		if request.form['usename'] != app.config['USERNAME']:
-			error = 'Invalid username/无效的用户名。'
+		if request.form['username'] != app.config['USERNAME']:
+			error = 'Invalid username'
 		elif request.form['password'] != app.config['PASSWORD']:
-			error = 'Invalid password/无效的密码。'
+			error = 'Invalid password'
 		else:
 			session['logged_in'] = True                                    #? session
-			flash('You were logged_in.')                                   #? flash
+			flash('You were logged in')                                   #? flash
 			return redirect(url_for('show_entries'))       #redirect 重新定向
 	return render_template('login.html', error = error)                    #? 为何要有error 这个参数
+
 
 
 @app.route('/logout')
