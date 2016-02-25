@@ -3,6 +3,9 @@ from flask import request
 from flask.ext.script import Manager  
 from flask.ext.bootstrap import Bootstrap 
 from flask.ext.moment import Moment
+from flask.ext.wtf import Form 
+from wtforms import StringField, SubmitField
+from wtforms.validators import Required 
 from datetime import datetime 
 
 app = Flask(__name__)
@@ -10,6 +13,13 @@ manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
+
+app.config['SECRET_KEY'] = 'flasky key'
+
+
+class NameForm(Form):
+    name = StringField('姓名', validators=[Required])
+    submit = SubmitField('提交')
 
 @app.route('/')
 def index():
