@@ -1,13 +1,14 @@
-{% extends "bootstrap/base.html" %}
+{% extends "bootstrap/nase.html" %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}
+    Flaskm
+{% endblock title %}
 
 {% block head %}
 {{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static',filename = 'favicon.ico')}}" type="img/x-icon">
-<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-{% endblock %}
-
+<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename = 'favicon.ico') }}">
+<link rel="ico" type="image/x-icon" href="{{ url_for('static', filename = 'favicon.ico') }}">
+{% endblock head %}
 
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
@@ -19,36 +20,32 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Flasky</a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">Flasky</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
             </ul>
         </div>
     </div>
-</div>
-{% endblock %}
-
+</div>   
+{% endblock navbar %}
 
 
 {% block content %}
 <div class="container">
-    {% for message in get_flashed_messages()  %}
+    {% for message in get_flashed_messages() %}
     <div class="alert alert-warning">
-            <button type="button" class="close" data-dismiss ="alert">&times;</button>
-            {{message}}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
     </div>
     {% endfor %}
-    <div class="page-header">
-    {% block page_content %}{% endblock page_content %}
-    </div>
+
+    {% block page_content %}{% endblock %}
 </div>
 {% endblock %}
-
-
 
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
-{% endblock scripts %}
+{% endblock %}

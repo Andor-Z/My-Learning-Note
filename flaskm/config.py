@@ -11,8 +11,10 @@ class Config:
 
     @staticmethod
     def init_app(app):
+        #init_app函数的函数体为空只是预留一个方法，方便调用
         '''
         参数为程序实例。在这个方法中，可以执行对当前环境的配置初始化。
+        init_app函数的函数体为空只是预留一个方法，方便调用
         '''
         pass
 
@@ -39,3 +41,4 @@ config = {
     'production':ProductionConfig,
     'default':DevelopmentConfig
 }
+
