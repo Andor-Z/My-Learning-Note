@@ -31,4 +31,8 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint) 
     # 注册蓝本
 
+    from .auth import auth as auth_blueprint 
+    app.register_blueprint(auth_blueprint, url_prefix = '/auth')
+    # url_prefix 是可选参数，如果使用了这个参数，注册后蓝本中定义的所有路由都会加上指定的前缀，如本例中，完整的 URL 就变成了 http://localhost:5000/auth/login。
+
     return app

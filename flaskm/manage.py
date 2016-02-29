@@ -5,8 +5,8 @@ from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
 
-#app = create_app(os.getenv('FLASK_CONFIG') or 'default') 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app = create_app(os.getenv('FLASK_CONFIG') or 'default') 
+
 #? 对于这种参数使用 or 的，在实际使用时究竟是如何使用参数的，先第一个，没有再使用第二个？
 manager = Manager(app)
 migrate = Migrate(app, db)
