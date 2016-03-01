@@ -1,5 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash 
 from . import db 
+from . import login_manager
+from flask.ext.login import UserMixin
 
 
 class Role(db.Model):
@@ -15,9 +17,10 @@ class Role(db.Model):
     # 在python解释器里直接输入类Role的实例a后，调用a.__repr__()方法
 
     
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key = True)
+    email = db.Column(db.String(64), unique = True, index = True)
     username = db.Column(db.String(64), unique = True, index = True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
@@ -37,7 +40,11 @@ class User(db.Model):
         return '<User %r>' %self.username
 
 
-
+@login_manager.user_loader    #?
+def load_user(user_id):
+    # Flask-Login 要求程序实现一个回调函数，使用指定的标识符加载用户。
+    return User.query.get(int(user_id))
+    # 加载用户的回调函数接收以 Unicode 字符串形式表示的用户标识符。如果能找到用户，这个函数必须返回用户对象；否则应该返回 None。
 
 
     

@@ -13,6 +13,12 @@
     <p>Happy to see you again!</p>
     <p>很高兴再次见到你！</p>
     {% endif %}
+    Hello,
+{% if current_user.is_authenticated %}
+{{ current_user.username }}
+{% else %}
+Stranger
+{% endif %}!
 </div>
 {{ wtf.quick_form(form) }}
 
