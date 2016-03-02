@@ -3,7 +3,8 @@ from flask.ext.login import login_user
 from flask.ext.login import logout_user, login_required
 from . import auth 
 from ..models import User 
-from .forms import LoginForm
+from .forms import LoginForm, RegistrationForm
+
 
 @auth.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -36,3 +37,14 @@ def secret():
 为了保护路由只让认证用户访问， Flask-Login 提供了一个 login_required 修饰器。
 如果未认证的用户访问这个路由， Flask-Login 会拦截请求，把用户发往登录页面。
 '''
+
+
+@auth.route('/register', methods = ['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(email = form.email.data, username = form.username.data, password = form.password.data)
+        db.session.add(user)
+        flash('You can now login.')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/register.html', form = form)
