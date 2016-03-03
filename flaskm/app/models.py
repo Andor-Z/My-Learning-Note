@@ -28,6 +28,25 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     comfirmed = db.Column(db.Boolean, default = False)
 
+    def generate_confirmation_token(self, expiration = 3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        # TimedJSONWebSignatureSerializer 类生成具有过期时间的 JSON Web 签名（ JSON Web Signatures， JWS）。这个类的构造函数接收的参数是一个密钥，可使用 SECRET_KEY 设置。expires_in 参数设置令牌的过期时间，单位为秒。
+        return s.dumps({'confirm':self.id})
+        # dumps() 方法为指定的数据生成一个加密签名，然后再对数据和签名进行序列化，生成令牌字符串
+
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False 
+        self.confirmed = True 
+        db.session.add(self)
+        return True
+
+
 
     @property
     def password(self):

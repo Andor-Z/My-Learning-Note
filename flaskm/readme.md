@@ -25,6 +25,16 @@ Mac Linux ：
 Windows :
 `(venv) > set MAIL_USERNAME = <flaskm@example.com>`
 
+Windows PowerShell 下获取环境变量：
+`Get-Childltem env:`
+或者
+`dir env:`
+
+Windows PowerShell 下设置环境变量：
+`$env:MAILNAME="Andor"`
+smtp.163.com
+MAIL_PORT = 465/994
+
 
 * 获取环境变量：
 ```

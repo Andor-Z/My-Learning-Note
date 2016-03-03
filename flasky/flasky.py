@@ -9,6 +9,7 @@ from flask.ext.moment import Moment
 from flask.ext.wtf import Form 
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate, MigrateCommand
+from flask.ext.mail import Mail , Message
 
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required 
@@ -26,10 +27,17 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['DEBUG'] = True
 
 
+app.config['MAIL_SERVER'] = 'smtp.163.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = True 
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
+mail = Mail(app)
 
 migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
@@ -92,6 +100,8 @@ def page_not_found(e):
 def inter_server_error(e):
     return render_template('500.html'), 500
 
+def send_email():
+    msg = Message('test subject', )
 
 
 if __name__ == '__main__':
