@@ -1,12 +1,25 @@
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user
-from flask.ext.login import logout_user, login_required
+from flask.ext.login import logout_user, login_required, current_user
 from . import auth 
 from .. import db
 from ..models import User 
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm
 
+
+@auth.before_app_request
+def before_request():
+    # 为何使用 before_request 钩子名作为函数名
+    if current_user.is_authenticated and not current_user.confirmed and request.endpoint[:5] != 'auth.' and request.endpoint != 'static':
+        return redirect(url_for('auth.unconfirmed'))
+        # request.endpoint 获取请求的端点
+
+@auth.route('/unconfirmed')
+def unconfirmed():
+    if current_user.is_anonymous() or current_user.confirmed:
+        return redirect(url_for('main.index'))
+    return render_template('auth/unconfirmed.html')
 
 @auth.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -47,6 +60,33 @@ def register():
     if form.validate_on_submit():
         user = User(email = form.email.data, username = form.username.data, password = form.password.data)
         db.session.add(user)
-        flash('You can now login.')
-        return redirect(url_for('auth.login'))
+        db.session.commot()
+        token = user.generate_confirmation_token()
+        send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user = user , token = token)
+        flash('A confirmation email has been sent to you by email.')
+        return redirect(url_for('main.index'))
     return render_template('auth/register.html', form = form)
+
+
+@auth.route('confirm')
+@login_required
+def resend_confirmation():
+    token = current_user.generate_confirmation_token()
+    send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user = user , token = token)
+    flash('A new confirmation email has been sent to you by email.')
+    return redirect(url_for('main.index'))
+
+@auth.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('main.index'))
+    if current_user.confirm(token):
+        #? 为何使用if 而不是 elif
+        #? 似乎user.confirm()只是add添加到回话，并未提交到数据库
+        flash('You have confirmed your account.')
+    else:
+        flash('The confirmation link is invalid or has expired.')
+    return redirect(url_for('main.index'))
+
+
