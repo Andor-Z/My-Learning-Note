@@ -21,3 +21,10 @@ Werkzeug==0.11.4
 wheel==0.24.0
 WTForms==2.1
 
+flask-openid
+sqlalchemy-migrate
+flask-whooshalchemy
+flask-babel
+guess_language
+flipflop
+coverage
