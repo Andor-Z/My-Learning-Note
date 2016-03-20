@@ -32,6 +32,7 @@ Windows PowerShell 下获取环境变量：
 
 Windows PowerShell 下设置环境变量：
 `$env:MAILNAME="Andor"`
+
 smtp.163.com
 MAIL_PORT = 465/994
 

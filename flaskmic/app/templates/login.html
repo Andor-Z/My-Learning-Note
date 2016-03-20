@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script type="text/javascript">
+function set_openid(openid, pr)
+{
+    u = openid.search('<username>')
+    if (u != -1) {
+        // openid requires username
+        user = prompt('Enter your ' + pr + ' username:')
+        openid = openid.substr(0, u) + user
+    }
+    form = document.forms['login'];
+    form.elements['openid'].value = openid
+}
+/*由于暂时没学js，只能先猜测一下：函数set_openid,需要2个传入参数，u表示openid中是否有<username>，如果有，则弹出对话框，在对话框中输入user，对openid重新赋值，最后将openid赋值到表单中的openid中。
+</script>
+    <h1>Sign In</h1>
+    <form action="" method="post" name="login">
+        {{ form.hidden_tag() }}  
+        {# form.hidden_tag() 模板参数将被替换为一个隐藏字段，用来是实现在配置中激活的 CSRF 保护。如果你已经激活了 CSRF，这个字段需要出现在你所有的表单中。 #}
+        <p>
+            Please enter your OpenID:<br>
+            {{ form.openid(size = 80) }}<br>
+            {% for error in form.openid.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}<br>
+            |{% for pr in providers %}
+                      <a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a> |
+                    {% endfor %}
+        </p>
+        <p>{{ form.remember_me }}Remember Me</p>
+        <p><input type="submit" value="Sign In"></input></p>
+        
+
+    </form>
+{% endblock content %}
