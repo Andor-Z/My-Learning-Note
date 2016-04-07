@@ -57,8 +57,9 @@ os.environ.get('MAIL_USERNAME')
             Windows环境下使用：
         python -m pip install xxx来替换 install xxx；
 
-
-
+### 日志
+#### 暂时简单化邮件
+    
 
 
 

@@ -5,21 +5,8 @@ from . import auth
 from .. import db
 from ..models import User 
 from ..email import send_email
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm,ChangePasswordForm
 
-
-@auth.before_app_request
-def before_request():
-    # 为何使用 before_request 钩子名作为函数名
-    if current_user.is_authenticated and not current_user.confirmed and request.endpoint[:5] != 'auth.' and request.endpoint != 'static':
-        return redirect(url_for('auth.unconfirmed'))
-        # request.endpoint 获取请求的端点
-
-@auth.route('/unconfirmed')
-def unconfirmed():
-    if current_user.is_anonymous or current_user.confirmed:
-        return redirect(url_for('main.index'))
-    return render_template('auth/unconfirmed.html')
 
 @auth.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -62,8 +49,9 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user = user , token = token)
+        # send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user = user , token = token)
         flash('A confirmation email has been sent to you by email.')
+        flash(url_for('auth.confirm', token = token, _external=True))
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form = form)
 
@@ -72,8 +60,10 @@ def register():
 @login_required
 def resend_confirmation():
     token = current_user.generate_confirmation_token()
-    send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user = user , token = token)
+    # send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user = current_user , token = token)  # NameError: name 'user' is not defined
     flash('A new confirmation email has been sent to you by email.')
+    flash(url_for('auth.confirm', token = token, _external=True))
+    # <a href ="{{ url_for('auth.confirm', token = token, _external=True) }}">验证链接</a>
     return redirect(url_for('main.index'))
 
 @auth.route('/confirm/<token>')
@@ -90,3 +80,38 @@ def confirm(token):
     return redirect(url_for('main.index'))
 
 
+@auth.before_app_request
+def before_request():
+    # 为何使用 before_request 钩子名作为函数名
+    if current_user.is_authenticated and not current_user.confirmed and request.endpoint[:5] != 'auth.' and request.endpoint != 'static':
+        return redirect(url_for('auth.unconfirmed'))
+        # request.endpoint 获取请求的端点
+
+@auth.route('/unconfirmed')
+def unconfirmed():
+    if current_user.is_anonymous or current_user.confirmed:
+        return redirect(url_for('main.index'))
+    return render_template('auth/unconfirmed.html')
+
+
+@auth.route('/change-password', methods = ['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.old_password.data):
+            current_user.password = form.password.data 
+            db.session.add(current_user)
+            flash('Your password has been updated')
+            return redirect(url_for('main.index'))
+        else:
+            flash('Invalid password 无效的密码')
+    return render_template('auth/change_password.html', form = form)
+
+
+@auth.before_app_request 
+def before_request():
+    if current_user.is_authenticated():
+        current_user.ping()
+        if not current_user.confirmed and request.endpoint[:5] != 'auth.':
+            return redirect(url_for('auth.unconfirmed'))
