@@ -1,12 +1,18 @@
 from flask.ext.wtf import Form
+from flask.ext.pagedown.fields import PageDownField
 from ..models import Role,User
 from wtforms import BooleanField,SelectField,TextAreaField,StringField, SubmitField, ValidationError
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 
 
 
+
 class NameForm(Form):
     name = StringField('What is your name?', validators=[Required()])
+    submit = SubmitField('Submit')
+
+class PostForm(Form):
+    body = PageDownField("What's your mind?", validators = [Required()] )
     submit = SubmitField('Submit')
 
 class EditProfileForm(Form):
@@ -26,7 +32,7 @@ class EditProfileAdminForm(Form):
     submit = SubmitField('Submit')
 
     def __init__(self, user, *args, **kwargs):
-        super(EditProfileAdminForm, delf).__init__(*args, **kwargs)
+        super(EditProfileAdminForm, self).__init__(*args, **kwargs)
         self.role.choices = [(role.id, role.name) for role in Role.query.order_by(Role.name).all()]
         self.user = user 
 

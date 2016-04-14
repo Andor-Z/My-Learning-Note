@@ -1,9 +1,12 @@
+import hashlib
+import bleach
 from werkzeug.security import generate_password_hash, check_password_hash 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db 
 from . import login_manager
 from datetime import datetime
-from flask import current_app
+from markdown import markdown
+from flask import current_app, request 
 from flask.ext.login import UserMixin, AnonymousUserMixin
 
 
@@ -48,16 +51,15 @@ class Role(db.Model):
         return '<Role %r>' % self.name 
     # 在python解释器里直接输入类Role的实例a后，调用a.__repr__()方法
 
-class Permission:
-    FOLLOW = 0x01 # 关注其他用户
-    COMMENT = 0x02 # 在其他人的文章中发布评论
-    WRITE_ARTICLES = 0x04 # 写文章
-    MODERATE_COMMENTS = 0x08 # 管理他人发表的评论
-    ADMINISTER = 0x80 # 管理员权限
+class Follow(db.Model):
+    __tablename__ = 'follows'
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key = True)
+    # follower 关注者 
+    # followed 被关注者
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key = True)
+    timestamp = db.Column(db.DateTime, default = datetime.utcnow)
 
 
-
-    
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key = True)
@@ -68,9 +70,23 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
     email = db.Column(db.String(64), unique = True, index = True)
     username = db.Column(db.String(64), unique = True, index = True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default = False)
+    avatar_hash = db.Column(db.String(32))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
+    followed = db.relationship('Follow', 
+                                foreign_keys = [Follow.follower_id], 
+                                backref = db.backref('follower', lazy = 'joined'),
+                                lazy = 'dynamic',
+                                cascade = 'all, delete-orphan')
+    followers = db.relationship('Follow', 
+                                foreign_keys = [Follow.followed_id], 
+                                backref = db.backref('followed', lazy = 'joined'),
+                                lazy = 'dynamic',
+                                cascade = 'all, delete-orphan')
+    # P134
+
 
     def __init__(self, **kwargs):
         '''
@@ -82,6 +98,10 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(permissions = 0xff).first()
             if self.role is None:  # 这句可以直接使用 else: ?
                 self.role = Role.query.filter_by(default = True).first()
+        if self.email is not None and self.avatar_hash is None:
+            self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
+
+
 
     def generate_confirmation_token(self, expiration = 3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
@@ -124,16 +144,120 @@ class User(UserMixin, db.Model):
 
     def can(self, permissions):
         return self.role is not None and (self.role.permissions & permissions) == permissions
-        # ?没看懂啊，(self.role.permissions & permissions)在self.role.permissions不为False的前提下，都返回的是permissions，这样肯定相等了啊
+        # & 为位运算
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
+
+    def gravatar(self, size =100, default = 'identicon', rating = 'g'):
+        if request.is_secure:
+            url = 'https://secure.gravatar.com/avatar'
+        else:
+            url = 'http://www.gravatar.com/avatar'
+        hash = self.avatar_hash or hashlib.md5(self.email.encode('utf-8')).hexdigest()
+        return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url= url, hash = hash, size = size, default = default, rating = rating)
+
+    def change_email(self, token):
+        self.email = new_email
+        self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
+        db.session.add(self)
+        return True 
+        # ? new_email是什么？这句话能真确应对改邮箱？
+
+    def is_following(self, user):
+        return self.followed.filter_by(followed_id = user.id).first() is not None 
+
+    def follow(self, user):
+        if not self.is_following(user):
+            f = Follow(follower = self, followed = user)
+            db.session.add(f)
+
+    def unfollow(self, user):
+        f = self.followed.filter_by(followed_id = user.id).first()
+        if f:
+            db.session.delete(f)
+
+    def is_followed_by(self, user):
+        return self.followers.filter_by(follower_id = user.id).first() is not None
+
+    @staticmethod
+    def generate_fake(count = 100):
+        '''
+        生成虚拟用户和博客文章
+        '''
+        from sqlalchemy.exc import IntegrityError
+        from random import seed 
+        import forgery_py
+
+        seed() # 不加参数，默认时间
+        for i in range(count):
+            u = User(email = forgery_py.internet.email_address(),
+                     username = forgery_py.internet.user_name(True),
+                     password = forgery_py.lorem_ipsum.word(),
+                     confirmed = True,
+                     name = forgery_py.name.full_name(),
+                     location = forgery_py.address.city(),
+                     about_me = forgery_py.lorem_ipsum.sentence(),
+                     member_since = forgery_py.date.date(True))
+            db.session.add(u)
+            try:
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key = True)
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    @staticmethod
+    def generate_fake(count = 100):
+        from random import seed, randint 
+        import forgery_py
+
+        seed()
+        user_count = User.query.count()
+        for i in range(count):
+            u = User.query.offset(randint(0, user_count - 1)).first()
+            # offset() 查询过滤器会跳过参数中指定的记录数量。 通过设定一个随机的偏移值，再调用 first()方法，就能每次都获得一个不同的随机用户。
+            p = Post(body = forgery_py.lorem_ipsum.sentences(randint(1, 3)),
+                     timestamp = forgery_py.date.date(True),
+                     author = u)
+            db.session.add(p)
+            db.session.commit()
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        # 首先，markdown() 函数初步把 Markdown 文本转换成 HTML。
+        # 然后，把得到的结果和允许使用的 HTML 标签列表传给 clean() 函数。 
+        # clean() 函数删除所有不在白名单中的标签。
+        # linkify() 这个函数由 Bleach 提供，把纯文本中的 URL 转换成适当的 <a> 链接。
+        # 最后一步是很有必要的，因为 Markdown规范没有为自动生成链接提供官方支持。 
+        # PageDown 以扩展的形式实现了这个功能，因此在服务器上要调用 linkify() 函数。
+        allowed_tags = ['a', 'abbr', 'acronym', 'b','blockquote','code', 'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p']
+        target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format = 'html'), tags = allowed_tags, strip = True))
+
+class Permission:
+    FOLLOW = 0x01 # 关注其他用户
+    COMMENT = 0x02 # 在其他人的文章中发布评论
+    WRITE_ARTICLES = 0x04 # 写文章
+    MODERATE_COMMENTS = 0x08 # 管理他人发表的评论
+    ADMINISTER = 0x80 # 管理员权限
+
+db.event.listen(Post.body, 'set', Post.on_changed_body)
+#设置事件监听
+# event.listen(表单或表单字段, 触发事件, 回调函数, 是否改变插入值 retval=True)
+# on_changed_body 函数注册在 body 字段上，是 SQLAlchemy“ set”事件的监听程序，这意味着只要这个类实例的 body 字段设了新值，函数就会自动被调用。 on_changed_body 函数把 body 字段中的文本渲染成 HTML 格式，结果保存在 body_html 中，自动且高效地完成Markdown 文本到 HTML 的转换。
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
         return False 
 
-    def is_adminstrator(self):
+    def is_administrator(self):
         return False 
 
 login_manager.anonymous_user = AnonymousUser 

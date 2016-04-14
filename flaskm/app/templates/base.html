@@ -8,6 +8,8 @@
 {{ super() }}
 <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename = 'favicon.ico') }}">
 <link rel="ico" type="image/x-icon" href="{{ url_for('static', filename = 'favicon.ico') }}">
+
+<link href="{{ url_for('static',filename='styles.css') }}" rel="stylesheet" type="text/css" >
 {% endblock head %}
 
 {% block navbar %}

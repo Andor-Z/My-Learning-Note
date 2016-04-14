@@ -1,28 +1,37 @@
+
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}Flaskm{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ pagedown.include_pagedown() }}
+{% endblock scripts %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
-    {% if not known %}
-    <p>Pleased to meet you!</p>
-    <p>很高兴见到你！</p>
-    {% else %}
-    <p>Happy to see you again!</p>
-    <p>很高兴再次见到你！</p>
-    {% endif %}
-    Hello,
+    <h1>Hello,
 {% if current_user.is_authenticated %}
 {{ current_user.username }}
 {% else %}
 Stranger
 {% endif %}!
+</h1>
 </div>
-{{ wtf.quick_form(form) }}
+
+<div>
+    {% if current_user.can(Permission.WRITE_ARTICLES) %}
+        {{ wtf.quick_form(form) }}
+    {% endif %}
+</div>
+{% include "_posts.html" %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.index') }}
+</div>
 
 <p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
 <p>That was {{moment(current_time).fromNow(refresh=True) }}.</p>
-
+<hr>
 {% endblock %}

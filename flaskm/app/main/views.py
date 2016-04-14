@@ -1,41 +1,133 @@
-from flask import render_template, session, redirect,url_for, flash
+from flask import render_template, session, redirect,url_for, flash, request, current_app, abort
 from flask.ext.login import login_required, login_user, current_user 
 from .. import db 
-from ..models import User 
+from ..models import User ,Role, Permission, Post
 from ..decorators import admin_required, permission_required
 from . import main  #main = Blueprint('main', __name__)
-from .forms import NameForm, EditProfileForm
-
-
-
-
+from .forms import NameForm, EditProfileForm, EditProfileAdminForm, PostForm
 from datetime import datetime 
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
-    form = NameForm() # è§†å›¾å‡½æ•°åˆ›å»ºä¸€ä¸ªNameForm
+    form = PostForm()
+    if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
+        post = Post(body = form.body.data, author = current_user._get_current_object() ) # User.query.filter_by(username = current_user).first()  
+        db.session.add(post)
+        return redirect(url_for('main.index'))
+    page = request.args.get('page', 1, type=int)
+    # äÖÈ¾µÄÒ³Êı´ÓÇëÇóµÄ²éÑ¯×Ö·û´®£¨ request.args£©ÖĞ»ñÈ¡£¬Èç¹ûÃ»ÓĞÃ÷È·Ö¸¶¨£¬ÔòÄ¬ÈÏäÖÈ¾µÚÒ»Ò³¡£²ÎÊı type=int ±£Ö¤²ÎÊıÎŞ·¨×ª»»³ÉÕûÊıÊ±£¬·µ»ØÄ¬ÈÏÖµ¡£
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page= current_app.config['FLASK_POSTS_PER_PAGE'], error_out = False)
+    # ÎªÁËÏÔÊ¾Ä³Ò³ÖĞµÄ¼ÇÂ¼£¬ Òª°Ñ all() »»³É Flask-SQLAlchemy Ìá¹©µÄ paginate() ·½·¨
+    # Ò³ÊıÊÇ paginate() ·½·¨µÄµÚÒ»¸ö²ÎÊı£¬Ò²ÊÇÎ¨Ò»±ØĞèµÄ²ÎÊı¡£
+    # ¿ÉÑ¡²ÎÊı per_page ÓÃÀ´Ö¸¶¨Ã¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼ÊıÁ¿£» Èç¹ûÃ»ÓĞÖ¸¶¨£¬ÔòÄ¬ÈÏÏÔÊ¾ 20 ¸ö¼ÇÂ¼¡£
+    # ¿ÉÑ¡²ÎÊıÎª error_out£¬µ±ÆäÉèÎª True Ê±£¨Ä¬ÈÏÖµ£©£¬Èç¹ûÇëÇóµÄÒ³Êı³¬³öÁË·¶Î§£¬Ôò»á·µ»Ø 404 ´íÎó£»Èç¹ûÉèÎª False£¬Ò³Êı³¬³ö·¶Î§Ê±»á·µ»ØÒ»¸ö¿ÕÁĞ±í¡£
+    posts = pagination.items
+    # posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('index.html', form = form, posts = posts, pagination = pagination, current_time = datetime.utcnow())
+
+@main.route('/post/<int:id>')
+def post(id):
+    post = Post.query.get_or_404(id)
+    # Ë÷ÒıÊ¹ÓÃgetº¯Êı
+    return render_template('post.html', posts = [post])
+
+@main.route('/follow/<username>')
+@login_required
+@permission_required(Permission.FOLLOW)
+def follow(username):
+    user = User.query.filter_by(username = username).first()
+    if user is None:
+        flash('Invalid user.')
+        return redirect(url_for('.index'))
+    if current_user.is_following(user):
+        flash('You are already following this user.')
+        return redirect(url_for('.user', username = username))
+    current_user.follow(user)
+    flash('You are now following %s.' % username)
+    return redirect(url_for('.user', username = username))
+
+@main.route('/unfollow/<username>')
+@login_required
+@permission_required(Permission.FOLLOW)
+def unfollow(username):
+    user = User.query.filter_by(username = username).first()
+    if user is None:
+        flash('Invalid user.')
+        return redirect(url_for('.index'))
+    if not current_user.is_following(user):
+        flash('You are not following this user.')
+        return redirect(url_for('.user', username = username))
+    current_user.unfollow(user)
+    flash('You are not following %s anymore.' % username)
+    return redirect(url_for('.user', username = username))    
+
+@main.route('/followers/<username>')
+def followers(username):
+    # ÏÔÊ¾¹Ø×¢ÁËÕâ¸öÓÃ»§µÄuser
+    user = User.query.filter_by(username = username).first()
+    if user is None:
+        flash('Invalid name.')
+        return redirect(url_for('.index'))
+    page = request.args.get('page', 1, type= int)
+    # ?
+    pagination = user.followers.paginate(page, per_page = current_app.config['FLASK_POSTS_PER_PAGE'],error_out = False)
+    follows = [{'user': item.follower, 'timestamp': item.timestamp} for item in pagination.items]
+    return render_template('followers.html', user = user, title = 'Followers of', endpoint = '.followers', pagination = pagination, follows = follows)
+
+@main.route('/followed-by/<username>')
+def followed_by(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Invalid name.')
+        return redirect(url_for('.index'))
+    page = request.args.get('page', 1, type= int)
+    # ?
+    pagination = user.followed.paginate(page, per_page = current_app.config['FLASK_POSTS_PER_PAGE'],error_out = False)
+    follows = [{'user': item.followed, 'timestamp': item.timestamp} for item in pagination.items]
+    return render_template('followers.html', user = user, title = 'Followerd of', endpoint = '.followers', pagination = pagination, follows = follows)
+
+
+@main.route('/edit/<int:id>', methods = ['GET', 'POST'])
+@login_required
+def edit(id):
+    post = Post.query.get_or_404(id)
+    if current_user != post.author and not current_user.can(Permission.ADMINISTER):
+        abort(403)
+    form = PostForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username = form.name.data).first()
-        if user is None:
-            user = User(username=form.name.data)
-            db.session.add(user)
-            session['known'] = False
-            if current_app.config['FLASKY_ADMIN']:
-                send_email(current_app.config['FLASKY_ADMIN'], 'New User',
-                           'mail/new_user', user=user)
-        else:
-            session['known'] = True
-        session['name'] = form.name.data
-        return redirect(url_for('.index'))  # é‡æ–°å®šå‘
-        # Flask ä¼šä¸ºè“æœ¬ä¸­çš„å…¨éƒ¨ç«¯ç‚¹åŠ ä¸Šä¸€ä¸ªå‘½åç©ºé—´ï¼Œè¿™æ ·å°±å¯ä»¥åœ¨ä¸åŒçš„è“æœ¬ä¸­ä½¿ç”¨ç›¸åŒçš„ç«¯ç‚¹åå®šä¹‰è§†å›¾å‡½æ•°ï¼Œ è€Œä¸ä¼šäº§ç”Ÿå†²çªã€‚å‘½åç©ºé—´å°±æ˜¯è“æœ¬çš„åå­—ï¼ˆ Blueprint æ„é€ å‡½æ•°çš„ç¬¬ä¸€ä¸ªå‚æ•°ï¼‰ï¼Œæ‰€ä»¥è§†å›¾å‡½æ•° index() æ³¨å†Œçš„ç«¯ç‚¹åæ˜¯ main.indexï¼Œå…¶ URL ä½¿ç”¨ url_for('main.index') è·å–ã€‚
-    return render_template('index.html', form = form , name = session.get('name'), known = session.get('known', False), current_time = datetime.utcnow())
+        post.body = form.body.data 
+        db.session.add(post)
+        flash('The post has been updated.')
+        return redirect(url_for('.post', id = post.id))
+    form.body.data = post.body
+    return render_template('edit_post.html', form = form)
+
+# @main.route('/', methods = ['GET', 'POST'])
+# def index():
+#     form = NameForm() # ÊÓÍ¼º¯Êı´´½¨Ò»¸öNameForm
+#     if form.validate_on_submit():
+#         user = User.query.filter_by(username = form.name.data).first()
+#         if user is None:
+#             user = User(username=form.name.data)
+#             db.session.add(user)
+#             session['known'] = False
+#             if current_app.config['FLASKY_ADMIN']:
+#                 send_email(current_app.config['FLASKY_ADMIN'], 'New User',
+#                            'mail/new_user', user=user)
+#         else:
+#             session['known'] = True
+#         session['name'] = form.name.data
+#         return redirect(url_for('.index'))  # ÖØĞÂ¶¨Ïò
+#         # Flask »áÎªÀ¶±¾ÖĞµÄÈ«²¿¶Ëµã¼ÓÉÏÒ»¸öÃüÃû¿Õ¼ä£¬ÕâÑù¾Í¿ÉÒÔÔÚ²»Í¬µÄÀ¶±¾ÖĞÊ¹ÓÃÏàÍ¬µÄ¶ËµãÃû¶¨ÒåÊÓÍ¼º¯Êı£¬ ¶ø²»»á²úÉú³åÍ»¡£ÃüÃû¿Õ¼ä¾ÍÊÇÀ¶±¾µÄÃû×Ö£¨ Blueprint ¹¹Ôìº¯ÊıµÄµÚÒ»¸ö²ÎÊı£©£¬ËùÒÔÊÓÍ¼º¯Êı index() ×¢²áµÄ¶ËµãÃûÊÇ main.index£¬Æä URL Ê¹ÓÃ url_for('main.index') »ñÈ¡¡£
+#     return render_template('index.html', form = form , name = session.get('name'), known = session.get('known', False), current_time = datetime.utcnow())
+
+
 
 @main.route('/user/<username>')
 def user(username):
-    user = User.query.filter_by(username = username).first()
-    if user is None:
-        abort(404)
-        return render_template('user.html', user = user)
+    user = User.query.filter_by(username = username).first_or_404()
+    posts = user.posts.order_by(Post.timestamp.desc()).all()
+    return render_template('user.html', user = user, posts = posts)
 
 @main.route('/edit-profile', methods = ['GET', 'POST'])
 @login_required
@@ -59,4 +151,24 @@ def edit_profile():
 @admin_required
 def edit_profile_admin(id):
     user = User.query.get_or_404(id)
-    
+    # User.query.get(  )   ÓÃÖ÷¼ü²éÑ¯ÓÃ»§
+    form = EditProfileAdminForm(user =user)
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.username = form.username.data 
+        user.confirmed = form.confirmed.data 
+        user.role = Role.query.get(form.role.data )
+        user.name = form.name.data
+        user.location = form.location.data 
+        user.about_me = form.about_me.data
+        db.session.add(user)
+        flash('The profile has been updated.')
+        return redirect(url_for('.user', username = user.username))
+    form.email.data = user.email 
+    form.username.data = user.username 
+    form.confirmed.data = user.confirmed 
+    form.role.data = user.role 
+    form.name.data = user.name 
+    form.location.data = user.location 
+    form.about_me.data = user.about_me 
+    return render_template('edit_profile.html', form = form, user = user)

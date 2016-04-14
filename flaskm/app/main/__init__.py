@@ -1,5 +1,5 @@
 from flask import Blueprint 
-
+from ..models import Permission
 main = Blueprint('main', __name__)  # 实例化一个 Blueprint 类对象
 
 @main.app_context_processor

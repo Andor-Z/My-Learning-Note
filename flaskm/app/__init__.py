@@ -5,7 +5,7 @@ from flask.ext.mail import Mail
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
-
+from flask.ext.pagedown import PageDown
 
 
 bootstrap = Bootstrap()
@@ -13,6 +13,7 @@ mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
 login_manager = LoginManager()
+pagedown = PageDown()
 
 login_manager.session_protection = 'strong'
 # LoginManager 对象的 session_protection 属性可以设为 None、 'basic' 或 'strong'，以提供不同的安全等级防止用户会话遭篡改。
@@ -37,6 +38,7 @@ def create_app(config_name):
     moment.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+    pagedown.init_app(app)
 
     # 附加路由和自定义的错误界面
     from .main import main as main_blueprint
