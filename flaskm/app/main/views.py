@@ -1,10 +1,10 @@
-from flask import render_template, session, redirect,url_for, flash, request, current_app, abort
+from flask import render_template, session, redirect,url_for, flash, request, current_app, abort, make_response
 from flask.ext.login import login_required, login_user, current_user 
 from .. import db 
-from ..models import User ,Role, Permission, Post
+from ..models import User ,Role, Permission, Post, Comment
 from ..decorators import admin_required, permission_required
 from . import main  #main = Blueprint('main', __name__)
-from .forms import NameForm, EditProfileForm, EditProfileAdminForm, PostForm
+from .forms import NameForm, EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from datetime import datetime 
 
 @main.route('/', methods = ['GET', 'POST'])
@@ -16,20 +16,55 @@ def index():
         return redirect(url_for('main.index'))
     page = request.args.get('page', 1, type=int)
     # 渲染的页数从请求的查询字符串（ request.args）中获取，如果没有明确指定，则默认渲染第一页。参数 type=int 保证参数无法转换成整数时，返回默认值。
-    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page= current_app.config['FLASK_POSTS_PER_PAGE'], error_out = False)
+    show_followed = False 
+    if current_user.is_authenticated:
+        show_followed = bool(request.cookies.get('show_followed', ''))
+    if show_followed:
+        query = current_user.followed_posts
+    else:
+        query = Post.query
+    pagination = query.order_by(Post.timestamp.desc()).paginate(page, per_page= current_app.config['FLASK_POSTS_PER_PAGE'], error_out = False)
     # 为了显示某页中的记录， 要把 all() 换成 Flask-SQLAlchemy 提供的 paginate() 方法
     # 页数是 paginate() 方法的第一个参数，也是唯一必需的参数。
     # 可选参数 per_page 用来指定每页显示的记录数量； 如果没有指定，则默认显示 20 个记录。
     # 可选参数为 error_out，当其设为 True 时（默认值），如果请求的页数超出了范围，则会返回 404 错误；如果设为 False，页数超出范围时会返回一个空列表。
     posts = pagination.items
     # posts = Post.query.order_by(Post.timestamp.desc()).all()
-    return render_template('index.html', form = form, posts = posts, pagination = pagination, current_time = datetime.utcnow())
+    return render_template('index.html', form = form, posts = posts, pagination = pagination,show_followed = show_followed, current_time = datetime.utcnow())
 
-@main.route('/post/<int:id>')
+@main.route('/all')
+@login_required
+def show_all():
+    resp = make_response(redirect(url_for('.index')))
+    resp.set_cookie('show_followed', '', max_age = 30*24*60*60)
+    return resp 
+    # set_cookie() 函数的前两个参数分别是 cookie 名和值。可选的 max_age 参数设置 cookie 的过期时间，单位为秒。如果不指定参数 max_age，浏览器关闭后 cookie 就会过期。在本例中，过期时间为 30 天，
+    # ?cookie 只能在响应对象中设置， 因此这两个路由不能依赖 Flask，要使用 make_response()方法创建响应对象。  
+
+@main.route('/followed')
+@login_required
+def show_followed():
+    resp = make_response(redirect(url_for('.index')))
+    resp.set_cookie('show_followed', '1', max_age = 30*24*60*60)
+    return resp 
+
+@main.route('/post/<int:id>', methods = ['GET', 'POST'])
 def post(id):
     post = Post.query.get_or_404(id)
     # 索引使用get函数
-    return render_template('post.html', posts = [post])
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(body = form.body.data, post = post, author = current_user._get_current_object())
+        # 评论的 author字段也不能直接设为 current_user，因为这个变量是上下文代理对象。真正的 User 对象要使用表达式 current_user._get_current_object() 获取。
+        db.session.add(comment)
+        flash('Your comment has been published.')
+        return redirect(url_for('.post', id = post.id, page = -1)) 
+    page = request.args.get('page', 1, type=int)
+    if page == -1:
+        page = (post.comments.count() -1) / current_app.config['FLASK_POSTS_PER_PAGE'] + 1
+    pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(page, per_page = current_app.config['FLASK_POSTS_PER_PAGE'], error_out = False)
+    comments = pagination.items 
+    return render_template('post.html', posts = [post], form = form, comments = comments, pagination = pagination)
 
 @main.route('/follow/<username>')
 @login_required

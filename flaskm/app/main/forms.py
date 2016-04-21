@@ -4,9 +4,6 @@ from ..models import Role,User
 from wtforms import BooleanField,SelectField,TextAreaField,StringField, SubmitField, ValidationError
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 
-
-
-
 class NameForm(Form):
     name = StringField('What is your name?', validators=[Required()])
     submit = SubmitField('Submit')
@@ -43,3 +40,8 @@ class EditProfileAdminForm(Form):
     def validate_username(self, field):
         if field.data != self.user.username and User.query.filter_by(username = field.data).first():
             raise ValidationError('Username already in use.')
+
+class CommentForm(Form):
+    body = StringField('', validators = [Required()])
+    submit = SubmitField('Submit')
+    

@@ -86,6 +86,7 @@ class User(UserMixin, db.Model):
                                 lazy = 'dynamic',
                                 cascade = 'all, delete-orphan')
     # P134
+    comments = db.relationship('Comment', backref = 'author', lazy = 'dynamic')
 
 
     def __init__(self, **kwargs):
@@ -100,6 +101,7 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(default = True).first()
         if self.email is not None and self.avatar_hash is None:
             self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
+        self.follow(self)
 
 
 
@@ -205,6 +207,32 @@ class User(UserMixin, db.Model):
             except IntegrityError:
                 db.session.rollback()
 
+    @staticmethod
+    def add_self_follows():
+        for user in User.query.all():
+            if not user.is_following(user):
+                user.follow(user)
+                db.session.add(user)
+                db.session.commit()
+
+    @property
+    def followed_posts(self):
+        return Post.query.join(Follow, Follow.followed_id == Post.author_id).filter(Follow.follower_id == self.id)
+    
+class Comment(db.Model):
+    __tablename__ = 'comment'
+    id = db.Column(db.Integer, primary_key = True)
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    disabled = db.Column(db.Boolean)
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'code', 'em', 'i', 'strong']
+        target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format = 'html'),tags = allowed_tags, strip = True))
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -213,6 +241,7 @@ class Post(db.Model):
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    comments = db.relationship('Comment', backref = 'post', lazy = 'dynamic')
 
     @staticmethod
     def generate_fake(count = 100):
@@ -232,6 +261,7 @@ class Post(db.Model):
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
+        # ?不太明白后两个参数的作用？
         # 首先，markdown() 函数初步把 Markdown 文本转换成 HTML。
         # 然后，把得到的结果和允许使用的 HTML 标签列表传给 clean() 函数。 
         # clean() 函数删除所有不在白名单中的标签。
