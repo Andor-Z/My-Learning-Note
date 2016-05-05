@@ -5,6 +5,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard_guess_string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True  # 每次request自动提交db.session.commit()
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    # 如果设置成 True (默认情况)，Flask-SQLAlchemy 将会追踪对象的修改并且发送信号。这需要额外的内存， 如果不必要的可以禁用它。
     FLASKM_MAIL_SUBJECT_PREFIX = '[Flaskm]' # 邮件前缀
     #FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     FLASKM_MAIL_SENDER = 'Flaskm admin <zyfsta@163.com>'
