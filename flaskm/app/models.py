@@ -252,7 +252,7 @@ class Post(db.Model):
         user_count = User.query.count()
         for i in range(count):
             u = User.query.offset(randint(0, user_count - 1)).first()
-            # offset() 查询过滤器会跳过参数中指定的记录数量。 通过设定一个随机的偏移值，再调用 first()方法，就能每次都获得一个不同的随机用户。
+            # ?offset() 查询过滤器会跳过参数中指定的记录数量。 通过设定一个随机的偏移值，再调用 first()方法，就能每次都获得一个不同的随机用户。
             p = Post(body = forgery_py.lorem_ipsum.sentences(randint(1, 3)),
                      timestamp = forgery_py.date.date(True),
                      author = u)
