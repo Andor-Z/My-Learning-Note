@@ -2,6 +2,8 @@
 # My-Learning-Note  
 记录学习的一些路程   
 ## 说明
+* 机器学习实战笔记[machinelearninginaction](https://github.com/Andor-Z/My-Learning-Note/tree/master/machinelearninginaction)
+* 爬虫[spider](https://github.com/Andor-Z/My-Learning-Note/tree/master/spider)
 * [Blog](http://blog.csdn.net/andor_zz)  
 * 部分学习笔记[note](https://github.com/Andor-Z/My-Learning-Note/tree/master/note)  
 本来是想将自己学习的笔记和一些心得，整理成Blog。但是逐渐发现一方面是自己的文笔较弱，一方法是对这些知识的理解不够深刻；写出来的东西总是不忍直视，所以还是一边学习加强知识理解，一边零散的记笔记吧。
