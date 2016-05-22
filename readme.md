@@ -1,32 +1,31 @@
-[TOC]
 
 # My-Learning-Note  
 记录学习的一些路程   
 ## 说明
-* 
+* 机器学习实战笔记[machinelearninginaction](https://github.com/Andor-Z/My-Learning-Note/tree/master/machinelearninginaction)
+* 爬虫[spider](https://github.com/Andor-Z/My-Learning-Note/tree/master/spider)
 * [Blog](http://blog.csdn.net/andor_zz)  
-* 部分学习笔记[note](https://github.com/Andor-Z/My-Learning-Note/tree/master/note)
+* 部分学习笔记[note](https://github.com/Andor-Z/My-Learning-Note/tree/master/note)  
 本来是想将自己学习的笔记和一些心得，整理成Blog。但是逐渐发现一方面是自己的文笔较弱，一方法是对这些知识的理解不够深刻；写出来的东西总是不忍直视，所以还是一边学习加强知识理解，一边零散的记笔记吧。
 * [个人的一些小项目](https://github.com/Andor-Z/My-Learning-Note/tree/master/My%20Projects)
 
 ## 日志
 
 
-* 16-01-19
-似乎我还没比较适合记录的地方
-前面一段时间在忙公司呼叫系统上线，然后上个星期爬虫终于有了进展了。自己也写了一个操作Excel的代码。  
-目前对于Python的学习方向有：
-    1、爬虫
-    先把静觅系列的爬虫学完，然后一边参考以前找出来其他杂七杂八的爬虫教程，再把知乎上前段时间关注的专栏的爬虫学学。
-    目前一直在用`urllib``re`等Python自带库，听说`requests``bs4`等库用起来很爽，还有`scrapy`也要学学
-    2、Web
-    已经确定用《Flask Web Development》学习Flask了，之前看了一点Flask官方文档的中文翻译，感觉学起来还是有点困难的。
-    3、数据分析
-    机器学习实战
-    集体智慧编程
-    机器基石--台大
+* 16-01-19  
+前面一段时间在忙公司呼叫系统上线，然后上个星期爬虫终于有了进展了。自己也写了一个操作Excel的代码。    
+目前对于Python的学习方向有：  
+    1、爬虫  
+    先把静觅系列的爬虫学完，然后一边参考以前找出来其他杂七杂八的爬虫教程，再把知乎上前段时间关注的专栏的爬虫学学。  
+    目前一直在用`urllib``re`等Python自带库，听说`requests``bs4`等库用起来很爽，还有`scrapy`也要学学  
+    2、Web  
+    已经确定用《Flask Web Development》学习Flask了，之前看了一点Flask官方文档的中文翻译，感觉学起来还是有点困难的。  
+    3、数据分析  
+    机器学习实战  
+    集体智慧编程  
+    机器基石--台大  
 
-    痛苦并努力着！
+ 
 
 
 
