@@ -1,0 +1,353 @@
+---
+title: "NoteCh06 Basic Graphs(基本图形）"
+author: "AndorZ"
+date: "2016年5月26日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## 6.1 bar plot条形图
+`opar <- par(no.readonly=TRUE)`
+在后续的示例中，将使用vcd包分法的Arthritis数据框，故需先安装它：  
+`install.packages("vcd")`  
+本章用到的其他包：  
+`install.packages("plotrix")` 
+`install.packages("sm")`
+`install.packages("vioplot")`
+Arthritis数据是探索类风湿性关节炎新疗法研究的结果。  
+在关节炎研究中，变量Improved记录了对每位接受了安慰剂或药物治疗的病人的治疗结果  
+```{r 治疗效果}
+library(vcd)
+counts <- table(Arthritis$Improved)
+counts
+```
+28位病人有了明显改善，14人有了部分改善，42人没有改善  
+```{r vertical barplot垂直条形图}
+opar <- par(no.readonly=TRUE)
+barplot(counts,
+        main = "Simple Bar Plot",
+        xlab = "Improvement",
+        ylab = "Frequency 频数")
+```
+```{r horizontal水平条形图}
+par(las=2)
+barplot(counts,
+        main = "Horizontal Bar Plot",
+        xlab = "Frequency",
+        ylab = "Improvement",
+        horiz = TRUE)
+par(opar)
+```
+  
+### 6.1.2 Stacked and grouped bar plot堆砌条形图和分组条形图  
+- 治疗类型和改善情况的列联表  
+```{r obtain 2-way frequency table}
+two_fre <- table(Arthritis$Improved, Arthritis$Treatment)
+two_fre
+```
+```{r stacked barplot堆砌条形图}
+barplot(two_fre,
+        main = "Stacked Bar Plot",
+        xlab = "Treatment", ylab = "Frequency",
+        col = c("red", "yellow", "green"),
+        legend=rownames(two_fre)) #beside=FALSE（默认值），堆砌
+```
+```{r grouped barplot分组条形图}
+barplot(two_fre,
+        main = "Group Bar Plot",
+        xlab = "Treatment", ylab = "Frequency",
+        col = c("red", "yellow", "green"),
+        legend=rownames(two_fre),
+        beside = TRUE)  #各列中的值将并列
+```
+参数legend.text为图例提供了各条形的标签（仅在传入数据为一个矩阵时有用）
+
+### 6.1.3 Bar plot for mean values均值条形图  
+```{r Bar plot for sorted mean values}
+states <- data.frame(state.region, state.x77)
+means <- aggregate(states$Illiteracy, by=list(state.region), FUN=mean)
+means
+means <- means[order(means$x),]
+means
+barplot(means$x, names.arg = means$Group.1)
+title("Mean Illiteracy Rate美国各地区平均文盲率排序的条形图")
+```
+可选参数`names.arg`允许指定一个字符向量作为条形的标签名  
+
+
+### 6.1.4 条形图的微调  
+`cex.names` 字号大小  
+```{r Fitting labels in bar plots 为条形图搭配标签}
+par(mar=c(5, 8, 4, 2)) # 按“下左上右”单位为英分，表示边界的大小。默认值c(5,4,4,2)+0.1
+# 增加y边界的大小
+par(las=2) # 标签 平行（=0）或者垂直（=2）于坐标轴
+counts <- table(Arthritis$Improved)
+barplot(counts,
+        main = "Treatment Outcome",
+        horiz = TRUE,
+        cex.names = 0.8,
+        names.arg = c("No Improvement", "Some Improvement", "Marked Improvement"))
+par(opar)
+```
+
+### 6.1.5 Spinogram棘状图  
+Spinogram 对堆砌条形图进行了重缩放，每个条形的高度为1， 每段的高度即表示比例  
+由 vcd 包中`spine()`函数绘制  
+```{r Spinogram}
+library(vcd)
+with(Arthritis,{
+  counts <- table(Treatment, Improved);
+  spine(counts, main="Spinogram Example")
+})
+```
+
+## 6.2 Pie charts饼图  
+`pie(x, labels)`  
+x为非负值向量，表示每个扇形的面积， labels表示各扇形标签的字符型向量  
+```{r Pie charts}
+par(mfrow=c(2, 2))  # 2行2列，按行绘图
+slices <- c(10, 12, 4, 16, 8)
+lbls <- c("US", "UK", "Australia", "Germany", "France")
+pie(slices, labels = lbls, main = "Simple Pie Chart")
+
+pct <- round(slices/sum(slices)*100)  # 
+lbls2 <- paste(lbls, " ", pct, "%", sep = "")
+pie(slices, labels = lbls2, col = rainbow(length(lbls2)),
+    main = "Pie Chart with Percentages")
+
+library(plotrix)
+pie3D(slices, labels = lbls2, explode=0.1, col = rainbow(length(lbls2)),
+      main = "3D Pie Chart")
+
+mytable <- table(state.region)
+lbls3 <- paste(names(mytable), "\n", mytable, sep="")
+pie(mytable, labels = lbls3, main = "Pie Chart from a Table \n (with sample size)")
+par(opar)
+```
+
+- fan plot扇形图  
+```{r fan plot}
+library(plotrix)
+slices <- c(10, 12, 4, 16, 8)
+lbls <- c("US", "UK", "Australia", "Germany", "France")
+fan.plot(slices, labels = lbls, main="Fan Plot")
+```
+
+
+## 6.3 Histograms 直方图  
+`hist(x)`  
+x 数据值组成的数据向量  
+参数`freq=FALSE`表示根据概率密度而不是频数绘制  
+参数`breaks`用于控制组的数量。  
+默认等距切分  
+
+```{r histograms}
+par(mfrow=c(2, 2))
+
+hist(mtcars$mpg)
+
+# 指定组数和颜色
+hist(mtcars$mpg, breaks = 12, col = "red", xlab = "Miles Per Gallon",
+     main = "Colored histogram with 12 bins")
+
+# 添加轴须图
+hist(mtcars$mpg, breaks = 12, col = "red", xlab = "Miles Per Gallon",
+     freq = FALSE, main = "Histogram, rug plot, density curve")
+rug(jitter(mtcars$mpg))  # 轴须线
+lines(density(mtcars$mpg), col="blue", lwd=2)  # 核密度线
+
+# 添加正态密度曲线和外框
+x <- mtcars$mpg
+h <- hist(x, breaks = 12, col = "red", xlab = "Miles Per Gallon",
+          main = "Histogram with normal curve and box")
+xfit <- seq(min(x), max(x), length=40)
+yfit <- dnorm(xfit, mean = mean(x), sd = sd(x))
+yfit <- yfit*diff(h$mids[1:2])*length(x)
+lines(xfit, yfit, col="blue", lwd=2)
+box()
+par(opar)
+```
+  
+  
+## 6.4 Kernel density plot 核密度图  
+核密度估计：估计随机变量概率密度函数的一种非参数方法。  
+核密度图：观察连续型分布的有效方法。  
+单独绘制核密度图;  
+`plot(density(x))`  
+向一副已经存在的图形上叠加一条密度图：
+`lines(density(x))`  
+
+```{r Kernel density plot}
+par(mfrow=c(2, 1))
+d <- density(mtcars$mpg)
+# 创建最简单图形
+plot(d)
+
+plot(d, main = "Kernel Density of Mile Per Gallon")
+# 将曲线修改为蓝色，并使用实心红色填充曲线下方的区域
+polygon(d,col = "red", border = "blue")
+rug(mtcars$mpg, col = "brown")  # 轴须线
+par(opar)
+```
+
+polygon()函数根据顶点的x和y坐标绘制多边形  
+  
+  
+核密度图可用于比较组间差异。
+`sm.density.compare()` 函数可向图形叠加多组核密度图。  
+`sm.density.compare(x, factor)`  
+x 是数值型向量， factor 是一个分组变量。  
+
+比较拥有4个、6个、8个气缸车型的每加仑汽油行驶英里数  
+```{r Comparing kernel density plots}
+library(sm)
+attach(mtcars)
+
+cyl.f <- factor(cyl, levels = c(4, 6, 8),
+                labels = c("4 cylinder", "6 cylinder", "8 cylinder"))
+sm.density.compare(mpg, cyl, xlab="Miles Per Gallon")
+title(main = "MPG Distribution by Car Cylinders")
+
+colfill <- c(2:(1+length(levels(cyl.f))))
+
+#legend(locator(1), levels(cyl.f), fill=colfill) # 通过鼠标单击增加图例
+legend("topright", levels(cyl.f), fill=colfill)
+detach(mtcars)
+
+```
+
+## 6.5 parallel box plots 箱线图  
+
+```{r parallel box plots}
+boxplot(mtcars$mpg, main="Box plot", ylab="Miles Per Gallon")
+```
+  
+两条须的延伸极限不会超过盒型各端加1.5倍四分位距的范围。  
+
+### 6.5.1 使用并列箱线图进行夸组比较  
+
+`boxplot(formula, data=dataframe)`  
+formula 是一个公式，例如公式`Y~A` 将类别型变量A的每个值并列的生成数值型变量Y的箱线图。  
+公式`Y~A*B` 则将为类别型变量A和B所有水平的两两组合生成数值型变量的箱线图。  
+dataframe 代表提供数据的数据框。  
+参数 varwidth=TRUE 是箱线图的**宽度与其样本大小的平方根成正比**。  
+参数 horizontal=TRUE 反转坐标轴的方向。
+参数 notch=TRUE 绘制含凹槽的箱线图。
+？ 两个箱的凹槽互不重叠，则表明它们的中位数有显著差异。
+
+```{r notched box plots}
+par(mfrow=c(1, 2))
+boxplot(mpg~cyl, data = mtcars,
+        main = "Car Mileage Data",
+        xlab = "Number of Cylinders",
+        ylab = "Miles Per Gallon")
+
+# 凹槽箱线图
+boxplot(mpg~cyl, data = mtcars,
+        notch=TRUE,
+        varwidth=TRUE,
+        col="red",
+        main = "Car Mileage Data",
+        xlab = "Number of Cylinders",
+        ylab = "Miles Per Gallon")
+par(opar)
+```
+可以看到不同组间油耗的区别非常明显。同时也可以发现，六缸车型的每加仑汽油行驶的英里数分布较其他两类车型更为均匀。与六缸和八缸车型相比，四缸车型的每加仑汽油行驶的英里数散布最广（且正偏）。在八缸组还有一个离群点。  
+  
+直观的理解应该是随着气缸数的增加，每加仑行驶里程数降低。  
+也就是书中所说的随着气缸数的减少，有凹明显降低。  
+
+```{r Box plots for two crossed factors}
+# create a factor for number of cylinders
+mtcars$cyl.f <- factor(mtcars$cyl, levels = c(4, 6, 8), labels=c("4", "6","8"))
+
+# create a factor for transmission type 变速箱因子变量
+mtcars$am.f <- factor(mtcars$am, levels = c(0, 1), labels = c("auot", "standard"))
+
+# generate boxplot
+boxplot(mpg ~ am.f*cyl.f, data=mtcars,
+        varwidth=TRUE,
+        col = c("gold", "darkgreen"),
+        main = "MPG Distribution by Auto Type",
+        xlab= "Auto Type", ylab="Miles Per Gallon")
+```
+  
+从这幅图中可以看出：
+1. 随着气缸数的增加，每加仑行驶里程数降低。即油耗随着缸数的下降而减少。  
+2. **对于4缸和6缸车，标准(standard)变速箱的油耗更高？？？？？？难道不应该是更低？？？？？？？？？？？？？**  
+3. 8缸车标准和自动并没有什么区别。  
+
+### 6.5.2 Vionlin Plots 小提琴图  
+
+箱线图与核密度图的结合。
+vioplot()函数的使用格式为：  
+`vioplot(x1, x2, ..., names= , col= )`  
+x1, x2, ...表示要绘制的一个或多个数值向量（将为每个向量绘制一幅小提琴图）。  
+names是小提琴图中标签的字符向量  
+```{r violin plots}
+library(vioplot)
+x1 <- mtcars$mpg[mtcars$cyl==4] 
+x2 <- mtcars$mpg[mtcars$cyl==6]
+x3 <- mtcars$mpg[mtcars$cyl==8]
+vioplot(x1, x2, x3, 
+        names=c("4 cyl", "6 cyl", "8 cyl"), 
+        col="gold")
+title("Violin Plots of Miles Per Gallon",
+      ylab="Miles Per Gallon",xlab="Number of Cylinders")
+```
+白点是中位数  
+黑色盒型的范围是下四分位点到上四分位点  
+细黑线表示须。外部形状即为核密度估计。  
+
+## 6.6 Dot Plot 点图  
+`dotchart(x, labels=)`  
+x是一个数值向量,labels是由每个点的标签组成的向量  
+
+```{r Dot plot}
+dotchart(mtcars$mpg, labels = row.names(mtcars), cex = .7,
+         main = "Gas Mileage for Car Models",
+         xlab = "Miles Per Gallon")
+```
+cex控制标签符号的大小。  
+  
+  
+通过添加参数**groups**来选定一个因子，用以指定x中元素的分组方式。如果这样做，则参数gcolor可以控制不同组标签的颜色，  
+```{r Dot plot grouped, sorted, and colored}
+# 根据没加仑行驶英里数升序排列
+x <- mtcars[order(mtcars$mpg),]
+
+x$cyl <- factor(x$cyl)
+x$color[x$cyl==4] <- "red"               
+x$color[x$cyl==6] <- "blue"
+x$color[x$cyl==8] <- "darkgreen" 
+dotchart(x$mpg,labels = row.names(x), xlab = "Miles Per Gallon",
+         main = "Gas Mileage for Car Models\ngrouped by cylinder",
+         cex = .7,pch = 19, 
+         groups = x$cyl,
+         gcolor = "black",
+         color = x$color)
+```
+
+```{r}
+x <- mtcars[order(mtcars$mpg),]
+x$am.f <- factor(x$am, levels = c(0, 1), labels = c("auot", "standard"))
+x$cyl <- factor(x$cyl)
+x$color[x$cyl==4] <- "red"               
+x$color[x$cyl==6] <- "blue"
+x$color[x$cyl==8] <- "darkgreen" 
+dotchart(x$mpg,labels = x$am.f, xlab = "Miles Per Gallon",
+         main = "Gas Mileage for Car Models\ngrouped by cylinder",
+         cex = .7,pch = 19, 
+         groups = x$cyl,
+         gcolor = "black",
+         color = x$color)
+```
+
+
+
+
+

@@ -1,0 +1,49 @@
+---
+title: "NoteCh03 Getting started with graphs"
+author: "AndorZ"
+date: "2016年5月25日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 3.1使用图形
+```{r 3.1.1}
+with(mtcars,{
+plot(wt, mpg) # 散点图，x车身重量，y每加仑汽车行驶英里数
+abline(lm(mpg~wt))   # 最优拟合曲线
+title("Regression of MPG on Weight")})
+```
+
+## 3.2 一个例子
+```{r 3.2}
+dose <- c(20, 30, 40, 45, 60)
+drugA <- c(16, 20, 27, 40, 60)
+drugB <- c(15, 18, 25, 31, 40)
+plot(dose, drugA, type = "b")
+```
+
+## 3.3 图形参数
+```{r}
+opar <- par(no.readonly = TRUE)  # 复制当前的图形参数设置到opar
+par(lty=2, pch=17)  # lty=2 默认线条修改为虚线，pch=17 默认点符号 实心三角
+plot(dose, drugA, type = "b")
+par(opar)  # 还原图形参数设置
+```
+上面的方法是设置了图形参数，另外还可以在绘制图形中直接提供optionname=value的键对值。仅对这幅图形本身有效。 
+  
+`plot(dose, drugA, type="b", lty=2, pch=17)`  
+  
+  
+
+#### 3.3.1 符号和线条  
+
+|**参数** |**描述**|
+| --- | :---|
+| pch | 绘点时使用的符号 |
+| cex | 绘图符号的缩小放大倍数 |
+| lty | 指定线条类型 |
+| lwd | 指定线条宽度，默认值的缩小放大倍数 |
+
