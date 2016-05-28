@@ -1,6 +1,12 @@
 
 # My-Learning-Note  
-记录学习的一些路程   
+记录学习的一些路程  
+
+## 笔记  
+仅是个人学习的部分记录，内容不全。  
+### R in Action(R 语言实战)  
+    - [NoteCh03_Getting_started_with_graphs]()
+
 ## 说明
 * 机器学习实战笔记[machinelearninginaction](https://github.com/Andor-Z/My-Learning-Note/tree/master/machinelearninginaction)
 * 爬虫[spider](https://github.com/Andor-Z/My-Learning-Note/tree/master/spider)
