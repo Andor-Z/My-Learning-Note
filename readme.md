@@ -6,7 +6,7 @@
 仅是个人学习的部分记录，内容不全。  
 ### [R in Action(R 语言实战)](https://github.com/Andor-Z/My-Learning-Note/tree/master/R/RiA2%20note)  
 - [NoteCh03_Getting_started_with_graphs](https://github.com/Andor-Z/My-Learning-Note/blob/master/R/RiA2%20note/NoteCh03%20Getting%20started%20with%20graphs.Rmd)  
-- [NoteCh06 Basic Graphs(基本图形）](https://github.com/Andor-Z/My-Learning-Note/blob/master/R/RiA2%20note/NoteCh06%20Basic%20Graphs(%E5%9F%BA%E6%9C%AC%E5%9B%BE%E5%BD%A2%EF%BC%89.Rmd)   
+- [NoteCh06 Basic Graphs(基本图形)](https://github.com/Andor-Z/My-Learning-Note/blob/master/R/RiA2%20note/NoteCh06%20Basic%20Graphs(%E5%9F%BA%E6%9C%AC%E5%9B%BE%E5%BD%A2%EF%BC%89.Rmd)   
 ### Flask-Note  
 - [Flask--注册全局变量](https://github.com/Andor-Z/My-Learning-Note/blob/master/note/Flask--%E6%B3%A8%E5%86%8C%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F.md)  
 
