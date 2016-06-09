@@ -1,0 +1,24 @@
+---
+title: "NoteCh05 Advanced data management(高级数据管理)"
+author: "AndorZ"
+date: "2016年5月30日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 正态分布函数  
+```{r norm}
+opar <- par(no.readonly=TRUE)
+x <- pretty(c(-3, 3), 30)
+y <- dnorm(x)
+plot(x, y,
+     type = "l", xlab = "Normal Deviate \n正态分布",
+     ylab = "Density 密度函数",
+     yaxs = "i")
+par(opar)
+```
+
+

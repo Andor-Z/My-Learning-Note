@@ -50,7 +50,10 @@ g.Permission = Permission
 ```
   
 
-
+- 疑问  
+2、3的具体使用还需研究  
+  
+1中的是只能在模板中使用，还是后台程序中也可使用？
 
 
 
@@ -59,6 +62,3 @@ g.Permission = Permission
 [Jinja模板-环境处理器](http://dormousehole.readthedocs.io/en/latest/templating.html#id6)
 
 
-Flask中注册全局变量  
-Flask中声明全局变量   
-Flask中注册变量到模板  
