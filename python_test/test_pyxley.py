@@ -1,16 +1,16 @@
-SELF = 0x01  # 查看和自己有关的费用条目
-DEPT = 0x02  # 查看本部门的费用条目
-ALL = 0x04   # 查看所有的费用条目
-A = 0x80
-a = 1
-b = 3
-c = 7
+def test_first():
+    return 3
+def test_second(num):
+    return num
+action = {  # 可以看做是一个sandbox
+        "para": 5,
+        "test_first" : test_first,
+        "test_second": test_second
+        }
+def test_eavl():  
+    condition = "para == 5 and test_second(test_first) > 5"
+    res = eval(condition, action)  # 解释condition并根据action对应的动作执行
+    print(res)
 
-
-
-
-def can(p, permission):
-    return  (p & permission) == permission
-
-# print(c)
-print(can(c,ALL ))
+if __name__ == '__main__':
+    test_eavl()

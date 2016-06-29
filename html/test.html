@@ -1,25 +1,9 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% load paginate_tags %} # 首先必须通过load模板标签载入分页标签
+{% paginate article_list 7 %} 把文章列表传给paginate函数，每页分7个，context上下文则自动被传入，无需显示指定
 
-<div id="container" style="width:600px">
+{% for article in article_list %}
+    display the article information
+{% endfor %}
 
-<div id="header" style="background-color:#FFA500;">
-<h1 style="margin-bottom:0;">Main Title of Web Page</h1></div>
-
-<div id="menu" style="background-color:#FFD700;height:100px;width:100px;float:left;">
-<b>Menu</b><br>
-HTML<br>
-CSS<br>
-JavaScript</div>
-
-<div id="content" style="background-color:#EEEEEE;height:200px;width:400px;float:left;">
-Content goes here</div>
-
-<div id="footer" style="background-color:#FFA500;clear:both;text-align:center;">
-Copyright &#169; W3Schools.com</div>
-
-</div>
-
-</body>
-</html>
+{% include 'blog/pagination.html' %}
+# 这里用到一个 include 技巧，把pagination的模板代码写在单独的pagination.html文件中，这样哪里需要用到哪里就 include 进来就行，提高代码的复用性。
