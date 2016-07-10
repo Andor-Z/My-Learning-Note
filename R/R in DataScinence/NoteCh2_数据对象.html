@@ -127,8 +127,7 @@ $(document).ready(function () {
 <div class="section level3">
 <h3>2.1.2 向量的生成</h3>
 <ul>
-<li>冒号和<code>seq</code><br />
-生成1到10,10个向量</li>
+<li>冒号和<code>seq</code>生成1到10,10个向量</li>
 </ul>
 <pre class="r"><code>v1 &lt;- 1:10
 v2 &lt;- seq(from=1, to=10, by=1)
@@ -163,12 +162,22 @@ sum(rect)</code></pre>
 <pre><code>## [1] 1.995993</code></pre>
 <pre class="r"><code># 近似等于2</code></pre>
 <ul>
-<li><code>rep</code></li>
+<li><code>rep</code>将第一向量参数分别重复times参数中向量的次数</li>
 </ul>
-<pre class="r"><code>g1 &lt;- rep(1:3, times = c(8, 10, 9))  # 将第一向量参数分别重复times参数中向量的次数
+<pre class="r"><code>g1 &lt;- rep(1:3, times = c(8, 10, 9))  
 g2 &lt;- factor(g1)
 g1</code></pre>
 <pre><code>##  [1] 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3</code></pre>
+<ul>
+<li>生成随机数<strong><code>runif</code></strong> <strong><code>sample</code></strong></li>
+</ul>
+<pre class="r"><code># 生成5个服从0-1之间均匀分布的随机数
+vec1 &lt;- runif(5)
+# 生成10个离散随机数，有放回的从AB字符中随机抽取
+vec2 &lt;- sample(c('A', 'B'), size=10, replace=T)</code></pre>
+</div>
+<div class="section level3">
+<h3>2.1.3 向量的计算</h3>
 </div>
 </div>
 

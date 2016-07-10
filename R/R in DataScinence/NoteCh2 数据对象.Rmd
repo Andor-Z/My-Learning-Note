@@ -36,8 +36,9 @@ n <- 500   # 准备分成500份
 l <- pi/n  # 每份小矩形的高度
 x <- seq(0, pi, length.out = n)
 rect <- sin(x) *l
-sum(rect)
 # 近似等于2
+sum(rect)
+
 ```
   
 - `rep`将第一向量参数分别重复times参数中向量的次数  

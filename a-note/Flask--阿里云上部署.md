@@ -1,4 +1,3 @@
-# Flask--阿里云ECS上部署Flask
 
 ### 背景  
 原则：快速，不折腾，尽量在最短的时间内，让web跑起来。
@@ -50,7 +49,8 @@ echo 'export SQLALCHEMY_DATABASE_URI="......"' >> ~/.bashrc
 `pip install uwsgi`  
   
 - 配置起动uWSGI  
-`config.ini`  
+`config.ini`   
+
 ```
 [uwsgi]
 
@@ -91,6 +91,8 @@ stats = 127.0.0.1:9191
 安装  
 `yum install supervisor`  
 在全局配置文件`/etc/supervisord.conf`中加入： 
+  
+
 ```
 [program:CM-Web]
 # 启动命令入口
